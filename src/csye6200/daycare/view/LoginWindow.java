@@ -1,15 +1,19 @@
 package csye6200.daycare.view;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Objects;
 import javax.swing.*;
-
 import csye6200.daycare.lib.*;
 /*
  * author:fc
  */
 public class LoginWindow extends JFrame{
-
+	private static final LoginWindow instance = new LoginWindow();
+	private LoginWindow() {}
+	public static LoginWindow getInstance() {
+		return instance;
+	}
 	private Toaster toaster;
 	
     public void start() {
@@ -220,6 +224,8 @@ public class LoginWindow extends JFrame{
     }
 
     private void loginEventHandler() {
-        toaster.warn("Login event");
+        //toaster.warn("Login event");
+    	this.setVisible(false);
+    	MainWindow.getInstance().start();
     }
 }
