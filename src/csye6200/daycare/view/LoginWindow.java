@@ -225,7 +225,15 @@ public class LoginWindow extends JFrame{
 
     private void loginEventHandler() {
         //toaster.warn("Login event");
-    	this.setVisible(false);
+    	mhide();
     	MainWindow.getInstance().start();
+    }
+    
+    public void mshow() {
+    	this.setVisible(true);
+    }
+    
+    public void mhide() {
+    	this.setVisible(false);
     }
 }
