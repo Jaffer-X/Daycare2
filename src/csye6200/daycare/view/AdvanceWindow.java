@@ -11,7 +11,7 @@ import csye6200.daycare.lib.*;
  */
 public class AdvanceWindow extends JFrame{
 	private static final AdvanceWindow instance = new AdvanceWindow();
-	private AdvanceWindow() {}
+	private AdvanceWindow() {start();}
 	public static AdvanceWindow getInstance() {
 		return instance;
 	}
@@ -55,7 +55,7 @@ public class AdvanceWindow extends JFrame{
         
         this.add(mainJPanel);
         this.pack();
-        this.setVisible(true);
+        this.setVisible(false);
         this.toFront();
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -208,7 +208,11 @@ public class AdvanceWindow extends JFrame{
         toaster.warn("goto advance view event");
     }
     
-    private void stop() {
+    public void mshow() {
+    	this.setVisible(true);
+    }
+    
+    public void mhide() {
     	this.setVisible(false);
     }
 }

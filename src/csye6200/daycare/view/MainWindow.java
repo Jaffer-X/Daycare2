@@ -11,7 +11,7 @@ import csye6200.daycare.lib.*;
  */
 public class MainWindow extends JFrame{
 	private static final MainWindow instance = new MainWindow();
-	private MainWindow() {}
+	private MainWindow() {start();}
 	public static MainWindow getInstance() {
 		return instance;
 	}
@@ -31,7 +31,7 @@ public class MainWindow extends JFrame{
 
         this.add(mainJPanel);
         this.pack();
-        this.setVisible(true);
+        this.setVisible(false);
         this.toFront();
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -179,12 +179,12 @@ public class MainWindow extends JFrame{
     }
     private void StudentEventHandler() {
         mhide();
-        StudentWindow.getInstance().start();
+        StudentWindow.getInstance().mshow();
     }
     private void AdvanceEventHandler() {
         //toaster.warn("goto advance view event");
     	mhide();
-    	AdvanceWindow.getInstance().start();
+    	AdvanceWindow.getInstance().mshow();
     }
     public void mshow() {
     	this.setVisible(true);

@@ -11,7 +11,7 @@ import csye6200.daycare.lib.*;
  */
 public class StudentWindow extends JFrame{
 	private static final StudentWindow instance = new StudentWindow();
-	private StudentWindow() {}
+	private StudentWindow() {start();}
 	public static StudentWindow getInstance() {
 		return instance;
 	}
@@ -132,7 +132,7 @@ public class StudentWindow extends JFrame{
         
         this.add(mainJPanel);
         this.pack();
-        this.setVisible(true);
+        this.setVisible(false);
         this.toFront();
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

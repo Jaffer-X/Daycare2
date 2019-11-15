@@ -10,7 +10,7 @@ import csye6200.daycare.lib.*;
  */
 public class LoginWindow extends JFrame{
 	private static final LoginWindow instance = new LoginWindow();
-	private LoginWindow() {}
+	private LoginWindow() {start();}
 	public static LoginWindow getInstance() {
 		return instance;
 	}
@@ -35,7 +35,7 @@ public class LoginWindow extends JFrame{
 
         this.add(mainJPanel);
         this.pack();
-        this.setVisible(true);
+        this.setVisible(false);
         this.toFront();
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -226,7 +226,7 @@ public class LoginWindow extends JFrame{
     private void loginEventHandler() {
         //toaster.warn("Login event");
     	mhide();
-    	MainWindow.getInstance().start();
+    	MainWindow.getInstance().mshow();
     }
     
     public void mshow() {

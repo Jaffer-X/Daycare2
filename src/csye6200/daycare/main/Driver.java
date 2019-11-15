@@ -15,7 +15,7 @@ import csye6200.daycare.view.LoginWindow;
 public class Driver {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		LoginWindow.getInstance().start();
+		LoginWindow.getInstance().mshow();
 		MySQLConnection m = new MySQLConnection();
 		List ml = m.getData("select * from `Basic_Student`;");
 		Iterator<ArrayList> it=ml.iterator();
