@@ -28,6 +28,7 @@ public class MainWindow extends JFrame{
         addTeacherButton(mainJPanel);
         addStudentButton(mainJPanel);
         addAdvanceButton(mainJPanel);
+        addQuitButton(mainJPanel);
 
         this.add(mainJPanel);
         this.pack();
@@ -145,7 +146,7 @@ public class MainWindow extends JFrame{
     }
     
     private void addTeacherButton(JPanel panel1) {
-    	JLabel tmp = createDefaultButton(panel1,UIUtils.BUTTON_TEXT_TEACHER,423,70,250,44);
+    	JLabel tmp = createDefaultButton(panel1,UIUtils.BUTTON_TEXT_TEACHER,423,60,250,40);
     	tmp.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -155,7 +156,7 @@ public class MainWindow extends JFrame{
     }
 
     private void addStudentButton(JPanel panel1) {
-    	JLabel tmp = createDefaultButton(panel1,UIUtils.BUTTON_TEXT_STUDENT,423,170,250,44);
+    	JLabel tmp = createDefaultButton(panel1,UIUtils.BUTTON_TEXT_STUDENT,423,140,250,40);
     	tmp.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -165,11 +166,21 @@ public class MainWindow extends JFrame{
     }
 
     private void addAdvanceButton(JPanel panel1) {
-    	JLabel tmp = createDefaultButton(panel1,UIUtils.BUTTON_TEXT_ADVANCE,423,270,250,44);
+    	JLabel tmp = createDefaultButton(panel1,UIUtils.BUTTON_TEXT_ADVANCE,423,220,250,40);
     	tmp.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 AdvanceEventHandler();
+            }
+        });
+    }
+    
+    private void addQuitButton(JPanel panel1) {
+    	JLabel tmp = createDefaultButton(panel1,UIUtils.BUTTON_TEXT_QUIT,423,300,250,40);
+    	tmp.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                QuitEventHandler();
             }
         });
     }
@@ -185,6 +196,9 @@ public class MainWindow extends JFrame{
         //toaster.warn("goto advance view event");
     	mhide();
     	AdvanceWindow.getInstance().mshow();
+    }
+    private void QuitEventHandler() {
+        System.exit(0);
     }
     public void mshow() {
     	this.setVisible(true);

@@ -24,7 +24,8 @@ public class UIUtils {
     public static final String BUTTON_TEXT_IMPORT = "Import";
     public static final String BUTTON_TEXT_EXPORT = "Export";
     public static final String BUTTON_TEXT_BACK = "Back";
-
+    public static final String BUTTON_TEXT_QUIT = "Quit";
+    
     public static final String PLACEHOLDER_TEXT_USERNAME = "Username/email";
 
     public static final int ROUNDNESS = 8;
