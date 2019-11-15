@@ -178,7 +178,8 @@ public class MainWindow extends JFrame{
         toaster.warn("goto teacher view event");
     }
     private void StudentEventHandler() {
-        toaster.warn("goto student view event");
+        mhide();
+        StudentWindow.getInstance().start();
     }
     private void AdvanceEventHandler() {
         //toaster.warn("goto advance view event");

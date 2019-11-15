@@ -19,6 +19,11 @@ public class UIUtils {
     public static final String BUTTON_TEXT_TEACHER = "Teacher";
     public static final String BUTTON_TEXT_STUDENT = "Student";
     public static final String BUTTON_TEXT_ADVANCE = "Advance";
+    public static final String BUTTON_TEXT_SEARCH = "Search";
+    public static final String BUTTON_TEXT_MODIFY = "Modify";
+    public static final String BUTTON_TEXT_IMPORT = "Import";
+    public static final String BUTTON_TEXT_EXPORT = "Export";
+    public static final String BUTTON_TEXT_BACK = "Back";
 
     public static final String PLACEHOLDER_TEXT_USERNAME = "Username/email";
 

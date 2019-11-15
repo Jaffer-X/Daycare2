@@ -17,7 +17,7 @@ public class Driver {
 		// TODO Auto-generated method stub
 		LoginWindow.getInstance().start();
 		MySQLConnection m = new MySQLConnection();
-		List ml = m.getData("select * from `Basic_Teacher`;");
+		List ml = m.getData("select * from `Basic_Student`;");
 		Iterator<ArrayList> it=ml.iterator();
 		List mt = m.getTitle();
 		Iterator<ArrayList> it2=mt.iterator();

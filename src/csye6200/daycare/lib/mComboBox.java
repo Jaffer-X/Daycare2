@@ -6,12 +6,12 @@ import java.awt.geom.RoundRectangle2D;
 
 public class mComboBox extends JComboBox {
     private Shape shape;
-    private Color borderColor = UIUtils.COLOR_INTERACTIVE;
+    private Color borderColor = Color.white;
 
     public mComboBox() {
         setOpaque(false);
-        setBackground(UIUtils.COLOR_INTERACTIVE);
-        setForeground(UIUtils.COLOR_BACKGROUND);
+        setBackground(UIUtils.COLOR_BACKGROUND);
+        setForeground(Color.white);
         //setCaretColor(Color.white);
         setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
         //setMargin(new Insets(2, 10, 2, 2));
@@ -21,7 +21,7 @@ public class mComboBox extends JComboBox {
 
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = UIUtils.get2dGraphics(g);
-        g2.setColor(getBackground());
+        g2.setColor(Color.blue);
         g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, UIUtils.ROUNDNESS, UIUtils.ROUNDNESS);
         super.paintComponent(g2);
     }
