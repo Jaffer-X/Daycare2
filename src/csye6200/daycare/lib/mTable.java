@@ -26,6 +26,19 @@ public class mTable extends JTable{
         setFont(UIUtils.FONT_GENERAL_UI);
     }
     
+    public mTable(String[] colnames,Object[][] data) {
+    	super(data,colnames);
+        setOpaque(false);
+        setBackground(UIUtils.COLOR_BACKGROUND);
+        setForeground(Color.white);
+        //setCaretColor(Color.white);
+        setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+        setAutoCreateRowSorter(true);
+        setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        setRowHeight(30);
+        setFont(UIUtils.FONT_GENERAL_UI);
+    }
+    
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = UIUtils.get2dGraphics(g);
         g2.setColor(getBackground());

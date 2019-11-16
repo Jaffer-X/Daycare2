@@ -127,6 +127,12 @@ public class StudentWindow extends JFrame{
         mainJPanel.add(separator2);
         separator2.setBounds(0, 420, 1080, 1);
         
+        JSeparator separator3 = new JSeparator();
+        separator3.setOrientation(SwingConstants.HORIZONTAL);
+        separator3.setForeground(UIUtils.COLOR_OUTLINE);
+        mainJPanel.add(separator3);
+        separator3.setBounds(0, 210, 700, 1);
+        
         //Button
         addSearchButton(mainJPanel);
         addModifyButton(mainJPanel);
@@ -135,22 +141,10 @@ public class StudentWindow extends JFrame{
         addBackButton(mainJPanel);
         
         //Table
-        mTable mt = new mTable();
-        DefaultTableModel myTM = new DefaultTableModel();
-        Person person1 = new Person("fan",28);
-        Person person2 = new Person("xie",22);
-        Person person3 = new Person("zhang",18);
-		String [] colTitles = {"ID","Name", "Age"};
-        myTM.setColumnCount(colTitles.length);
-        mt.setModel(myTM);
-        myTM.setColumnIdentifiers(colTitles);
-        int id=0;
-        myTM.addRow(new Object[]{++id, person1.getName(), person1.getAge()});
-        myTM.addRow(new Object[]{++id, person2.getName(), person2.getAge()});
-        myTM.addRow(new Object[]{++id, person3.getName(), person3.getAge()});
-	    JScrollPane scrollPane = new JScrollPane(mt);
-        mainJPanel.add(mt);
-        mt.setBounds(0, 420, 1080, 340);
+        
+        String [] colTitles = {"ID","Name", "Age"};
+        Object[][] data= {new Object[]{1, 2, 3}, new Object[]{4, 5, 6},new Object[]{7, 8, 9}};
+        simpleTable(colTitles,data,mainJPanel);
         
         this.add(mainJPanel);
         this.pack();
@@ -161,6 +155,12 @@ public class StudentWindow extends JFrame{
         setLocation(screenSize.width / 2 - getWidth() / 2, screenSize.height / 2 - getHeight() / 2);
 
         toaster = new Toaster(mainJPanel);
+    }
+    
+    private void simpleTable(String[] colnames, Object[][] data, JPanel p) {
+    	mTable table = new mTable(colnames,data);
+    	p.add(table);
+    	table.setBounds(0, 420, 1080, 340);
     }
 
     private JPanel getMainJPanel() {
