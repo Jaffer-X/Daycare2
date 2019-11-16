@@ -15,6 +15,11 @@ public class Person {
 		this.Age = age;
 		this.Timestamp = datetime;
 	}
+	public Person(String name, int age) {
+		super();
+		this.Name = name;
+		this.Age = age;
+	}
 	public String getName() {
 		return Name;
 	}

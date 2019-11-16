@@ -4,7 +4,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Objects;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import csye6200.daycare.lib.*;
+import csye6200.daycare.model.Person;
+import csye6200.daycare.model.Student;
 
 /*
  * author:fc
@@ -129,6 +133,24 @@ public class StudentWindow extends JFrame{
         addImportButton(mainJPanel);
         addExportButton(mainJPanel);
         addBackButton(mainJPanel);
+        
+        //Table
+        mTable mt = new mTable();
+        DefaultTableModel myTM = new DefaultTableModel();
+        Person person1 = new Person("fan",28);
+        Person person2 = new Person("xie",22);
+        Person person3 = new Person("zhang",18);
+		String [] colTitles = {"ID","Name", "Age"};
+        myTM.setColumnCount(colTitles.length);
+        mt.setModel(myTM);
+        myTM.setColumnIdentifiers(colTitles);
+        int id=0;
+        myTM.addRow(new Object[]{++id, person1.getName(), person1.getAge()});
+        myTM.addRow(new Object[]{++id, person2.getName(), person2.getAge()});
+        myTM.addRow(new Object[]{++id, person3.getName(), person3.getAge()});
+	    JScrollPane scrollPane = new JScrollPane(mt);
+        mainJPanel.add(mt);
+        mt.setBounds(0, 420, 1080, 340);
         
         this.add(mainJPanel);
         this.pack();
