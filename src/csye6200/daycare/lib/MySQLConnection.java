@@ -60,7 +60,7 @@ public class MySQLConnection {
         return dataResult;
     }
     
-    public List getData(String sql) {
+    public List sendSQLQuery(String sql) {
     	titleResult.clear();
     	dataResult.clear();
         try {
@@ -74,7 +74,7 @@ public class MySQLConnection {
 		return null;
     }
     
-    public boolean sendSQL(String sql) {
+    public boolean sendSQLInsert(String sql) {
     	int result=0;
         try {
             pst = conn.prepareStatement(sql);

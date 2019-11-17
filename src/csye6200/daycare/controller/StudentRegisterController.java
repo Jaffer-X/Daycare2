@@ -18,6 +18,6 @@ public class StudentRegisterController extends AbstractRegisterController {
 		if(mConn.getConnection()==null) {
 			return false;
 		}
-		return mConn.sendSQL(sql);	
+		return mConn.sendSQLInsert(sql);	
 	}
 }

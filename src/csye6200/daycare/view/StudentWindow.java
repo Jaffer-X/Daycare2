@@ -9,7 +9,6 @@ import javax.swing.table.DefaultTableModel;
 import csye6200.daycare.lib.*;
 import csye6200.daycare.model.Person;
 import csye6200.daycare.model.Student;
-
 /*
  * author:fc
  */
@@ -21,14 +20,33 @@ public class StudentWindow extends JFrame{
 	}
 	
 	private Toaster toaster;
+	private ButtonGroup searchGroup;
+	private mRadioButton RB_searchTeacher;
+	private mRadioButton RB_searchRecord;
+	private mComboBox CB_Student;
+	private mTextField TF_Student;
+	private ButtonGroup studentGroup;
+	private mRadioButton RB_studentBasic;
+	private mRadioButton RB_studentImmunization;
+	private mCheckBox CKB_student1;
+	private mCheckBox CKB_student2;
+	private mCheckBox CKB_student3;
+	private mComboBox CB_Teacher;
+	private mTextField TF_Record;
+	private ButtonGroup recordGroup;
+	private mRadioButton RB_teachingRecord;
+	private mRadioButton RB_immunizationRecord;
+	private mCheckBox CKB_record1;
+	private mCheckBox CKB_record2;
+	private mCheckBox CKB_record3;
 	
     public void start() {
         JPanel mainJPanel = getMainJPanel();
         
         //search group
-        ButtonGroup searchGroup = new ButtonGroup();
-        mRadioButton RB_searchTeacher = new mRadioButton("Search Student");
-        mRadioButton RB_searchRecord = new mRadioButton("Search Record");
+        searchGroup = new ButtonGroup();
+        RB_searchTeacher = new mRadioButton("Search Student");
+        RB_searchRecord = new mRadioButton("Search Record");
         searchGroup.add(RB_searchTeacher);
         searchGroup.add(RB_searchRecord);
         mainJPanel.add(RB_searchTeacher);
@@ -44,7 +62,7 @@ public class StudentWindow extends JFrame{
         L_keywordS.setFont(UIUtils.FONT_GENERAL_UI);
         L_keywordS.setBounds(50,70,100,40);
         
-        mComboBox CB_Student=new mComboBox();    
+        CB_Student=new mComboBox();    
         CB_Student.addItem("Name");    
         CB_Student.addItem("Age");
         CB_Student.addItem("ParentName");
@@ -53,13 +71,13 @@ public class StudentWindow extends JFrame{
         mainJPanel.add(CB_Student);
         CB_Student.setBounds(150,70,200,40);
         
-        mTextField TF_Student = new mTextField();
+        TF_Student = new mTextField();
         mainJPanel.add(TF_Student);
         TF_Student.setBounds(400,70,200,40);
         
-        ButtonGroup studentGroup = new ButtonGroup();
-        mRadioButton RB_studentBasic = new mRadioButton("Basic");
-        mRadioButton RB_studentImmunization = new mRadioButton("Immunization");
+        studentGroup = new ButtonGroup();
+        RB_studentBasic = new mRadioButton("Basic");
+        RB_studentImmunization = new mRadioButton("Immunization");
         studentGroup.add(RB_studentBasic);
         studentGroup.add(RB_studentImmunization);
         mainJPanel.add(RB_studentBasic);
@@ -68,9 +86,9 @@ public class StudentWindow extends JFrame{
         RB_studentImmunization.setBounds(50,170,200,40);
         RB_studentBasic.setSelected(true);
         
-        mCheckBox CKB_student1 = new mCheckBox("Teacher"); 
-        mCheckBox CKB_student2 = new mCheckBox("Classroom");
-        mCheckBox CKB_student3 = new mCheckBox("Group"); 
+        CKB_student1 = new mCheckBox("Teacher"); 
+        CKB_student2 = new mCheckBox("Classroom");
+        CKB_student3 = new mCheckBox("Group"); 
         mainJPanel.add(CKB_student1); 
         mainJPanel.add(CKB_student2); 
         mainJPanel.add(CKB_student3); 
@@ -85,20 +103,20 @@ public class StudentWindow extends JFrame{
         L_keywordR.setFont(UIUtils.FONT_GENERAL_UI);
         L_keywordR.setBounds(50,270,100,40);
         
-        mComboBox CB_Teacher=new mComboBox();    
+        CB_Teacher=new mComboBox();    
         CB_Teacher.addItem("Name");    
         CB_Teacher.addItem("Age");
         CB_Teacher.addItem("Wage");
         mainJPanel.add(CB_Teacher);
         CB_Teacher.setBounds(150,270,200,40);
         
-        mTextField TF_Record = new mTextField();
+        TF_Record = new mTextField();
         mainJPanel.add(TF_Record);
         TF_Record.setBounds(400,270,200,40);
         
-        ButtonGroup recordGroup = new ButtonGroup();
-        mRadioButton RB_teachingRecord = new mRadioButton("Teaching");
-        mRadioButton RB_immunizationRecord = new mRadioButton("Immunization");
+        recordGroup = new ButtonGroup();
+        RB_teachingRecord = new mRadioButton("Teaching");
+        RB_immunizationRecord = new mRadioButton("Immunization");
         recordGroup.add(RB_teachingRecord);
         recordGroup.add(RB_immunizationRecord);
         mainJPanel.add(RB_teachingRecord);
@@ -107,9 +125,9 @@ public class StudentWindow extends JFrame{
         RB_immunizationRecord.setBounds(50,370,200,40);
         RB_teachingRecord.setSelected(true);
         
-        mCheckBox CKB_record1 = new mCheckBox("All"); 
-        mCheckBox CKB_record2 = new mCheckBox("Upcomming");
-        mCheckBox CKB_record3 = new mCheckBox("Overdue"); 
+        CKB_record1 = new mCheckBox("All"); 
+        CKB_record2 = new mCheckBox("Upcomming");
+        CKB_record3 = new mCheckBox("Overdue"); 
         mainJPanel.add(CKB_record1); 
         mainJPanel.add(CKB_record2); 
         mainJPanel.add(CKB_record3); 

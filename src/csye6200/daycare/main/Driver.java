@@ -10,7 +10,7 @@ import csye6200.daycare.lib.MySQLConnection;
 import csye6200.daycare.view.LoginWindow;
 
 /*
- * author:jf
+ * author:fc(chong fan), jf(jiafeng xie)
  */
 public class Driver {
 	public static void main(String[] args) {
