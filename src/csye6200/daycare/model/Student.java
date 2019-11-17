@@ -12,6 +12,53 @@ public class Student extends Person {
 	private String ParentName;
 	private String Address;
 	private String ParentPhone;
+	private String gender;
+	private int readTest;
+	private int sportTest;
+	private int mathTest;
+	
+	public Student(String name, int age,String parentName, String parentPhone, String gender, String Address, int read,int sport, int math){
+		super(name,age);
+		this.ParentName=parentName;
+		this.ParentPhone=parentPhone;
+		this.Address = Address;
+		this.readTest = read;
+		this.sportTest = sport;
+		this.mathTest = math;
+	}
+	
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public int getReadTest() {
+		return readTest;
+	}
+
+	public void setReadTest(int readTest) {
+		this.readTest = readTest;
+	}
+
+	public int getSportTest() {
+		return sportTest;
+	}
+
+	public void setSportTest(int sportTest) {
+		this.sportTest = sportTest;
+	}
+
+	public int getMathTest() {
+		return mathTest;
+	}
+
+	public void setMathTest(int mathTest) {
+		this.mathTest = mathTest;
+	}
+
 	public int getStudentId() {
 		return StudentId;
 	}

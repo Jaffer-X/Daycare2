@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 public class UIUtils {
     public static final Font FONT_GENERAL_UI = new Font("Segoe UI", Font.PLAIN, 20);
+    public static final Font FONT_GENERAL_UI_SMALL = new Font("Segoe UI", Font.PLAIN, 15);
     public static final Font FONT_FORGOT_PASSWORD = new Font("Segoe UI", Font.PLAIN, 12);
 
     public static final Color COLOR_OUTLINE = new Color(255, 255, 255);
@@ -25,6 +26,7 @@ public class UIUtils {
     public static final String BUTTON_TEXT_EXPORT = "Export";
     public static final String BUTTON_TEXT_BACK = "Back";
     public static final String BUTTON_TEXT_QUIT = "Quit";
+    public static final String BUTTON_TEXT_EXECUTE = "Execute";
     
     public static final String PLACEHOLDER_TEXT_USERNAME = "Username/email";
 

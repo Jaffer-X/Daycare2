@@ -27,7 +27,7 @@ public class StudentWindow extends JFrame{
         
         //search group
         ButtonGroup searchGroup = new ButtonGroup();
-        mRadioButton RB_searchTeacher = new mRadioButton("Search Teacher");
+        mRadioButton RB_searchTeacher = new mRadioButton("Search Student");
         mRadioButton RB_searchRecord = new mRadioButton("Search Record");
         searchGroup.add(RB_searchTeacher);
         searchGroup.add(RB_searchRecord);
@@ -35,6 +35,7 @@ public class StudentWindow extends JFrame{
         mainJPanel.add(RB_searchRecord);
         RB_searchTeacher.setBounds(20,20,200,40);
         RB_searchRecord.setBounds(20,220,200,40);
+        RB_searchTeacher.setSelected(true);
         
         //student Area
         JLabel L_keywordS = new JLabel("Keyword:");
@@ -65,6 +66,7 @@ public class StudentWindow extends JFrame{
         mainJPanel.add(RB_studentImmunization);
         RB_studentBasic.setBounds(50,120,200,40);
         RB_studentImmunization.setBounds(50,170,200,40);
+        RB_studentBasic.setSelected(true);
         
         mCheckBox CKB_student1 = new mCheckBox("Teacher"); 
         mCheckBox CKB_student2 = new mCheckBox("Classroom");
@@ -103,6 +105,7 @@ public class StudentWindow extends JFrame{
         mainJPanel.add(RB_immunizationRecord);
         RB_teachingRecord.setBounds(50,320,200,40);
         RB_immunizationRecord.setBounds(50,370,200,40);
+        RB_teachingRecord.setSelected(true);
         
         mCheckBox CKB_record1 = new mCheckBox("All"); 
         mCheckBox CKB_record2 = new mCheckBox("Upcomming");

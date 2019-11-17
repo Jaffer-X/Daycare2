@@ -73,6 +73,18 @@ public class MySQLConnection {
         }
 		return null;
     }
+    
+    public boolean sendSQL(String sql) {
+    	int result=0;
+        try {
+            pst = conn.prepareStatement(sql);
+            result = pst.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("error in execute sql");
+            e.printStackTrace();
+        }
+		return result != 0?true:false;
+    }
 
     public void close() {
         try {
