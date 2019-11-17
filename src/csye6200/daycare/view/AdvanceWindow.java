@@ -7,6 +7,8 @@ import javax.swing.*;
 
 import csye6200.daycare.controller.StudentRegisterController;
 import csye6200.daycare.lib.*;
+import csye6200.daycare.main.UserCircumstances;
+import csye6200.daycare.main.UserCircumstances.ASSIGN_STRATEGY;
 
 /*
  * author:fc
@@ -38,6 +40,9 @@ public class AdvanceWindow extends JFrame{
 	private mRadioButton RB_basicStrategy;
 	private mRadioButton RB_AISVMStrategy;
 	private mRadioButton RB_AIDTStrategy;
+	private ButtonGroup DB_Group;
+	private mRadioButton RB_AsynDB;
+	private mRadioButton RB_SynDB;
 	
 	
     public void start() {
@@ -198,6 +203,91 @@ public class AdvanceWindow extends JFrame{
         RB_AISVMStrategy.setBounds(50,500,300,40);
         RB_AIDTStrategy.setBounds(50,550,300,40);
         RB_basicStrategy.setSelected(true);
+        RB_basicStrategy.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				if(RB_basicStrategy.isSelected()) {
+					toaster.success("Switch to Basic Assignment");
+					UserCircumstances.getInstance().setCurrent_strategy(ASSIGN_STRATEGY.BASIC);
+				}else if(RB_AISVMStrategy.isSelected()) {
+					toaster.success("Switch to AI SVM Agorithm Assignment");
+					UserCircumstances.getInstance().setCurrent_strategy(ASSIGN_STRATEGY.AI_SVM);
+				}else if(RB_AIDTStrategy.isSelected()) {
+					toaster.success("Switch to AI DT Agorithm Assignment");
+					UserCircumstances.getInstance().setCurrent_strategy(ASSIGN_STRATEGY.AI_DT);
+				};
+			}	
+        });
+        RB_AISVMStrategy.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				if(RB_basicStrategy.isSelected()) {
+					toaster.success("Switch to Basic Assignment");
+					UserCircumstances.getInstance().setCurrent_strategy(ASSIGN_STRATEGY.BASIC);
+				}else if(RB_AISVMStrategy.isSelected()) {
+					toaster.success("Switch to AI SVM Agorithm Assignment");
+					UserCircumstances.getInstance().setCurrent_strategy(ASSIGN_STRATEGY.AI_SVM);
+				}else if(RB_AIDTStrategy.isSelected()) {
+					toaster.success("Switch to AI DT Agorithm Assignment");
+					UserCircumstances.getInstance().setCurrent_strategy(ASSIGN_STRATEGY.AI_DT);
+				};
+			}	
+        });
+        RB_AIDTStrategy.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				if(RB_basicStrategy.isSelected()) {
+					toaster.success("Switch to Basic Assignment");
+					UserCircumstances.getInstance().setCurrent_strategy(ASSIGN_STRATEGY.BASIC);
+				}else if(RB_AISVMStrategy.isSelected()) {
+					toaster.success("Switch to AI SVM Agorithm Assignment");
+					UserCircumstances.getInstance().setCurrent_strategy(ASSIGN_STRATEGY.AI_SVM);
+				}else if(RB_AIDTStrategy.isSelected()) {
+					toaster.success("Switch to AI DT Agorithm Assignment");
+					UserCircumstances.getInstance().setCurrent_strategy(ASSIGN_STRATEGY.AI_DT);
+				};
+			}	
+        });
+        
+        DB_Group = new ButtonGroup();
+        RB_AsynDB = new mRadioButton("Asynchronization Visit DB");
+        RB_SynDB = new mRadioButton("Synchronization Visit DB");
+        DB_Group.add(RB_AsynDB);
+        DB_Group.add(RB_SynDB);
+        mainJPanel.add(RB_AsynDB);
+        mainJPanel.add(RB_SynDB);
+        RB_AsynDB.setBounds(450,450,300,40);
+        RB_SynDB.setBounds(450,500,300,40);
+        RB_AsynDB.setSelected(true);
+        RB_AsynDB.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				if(RB_AsynDB.isSelected()) {
+					toaster.success("Switch to Asyn DB Visit Mode");
+					UserCircumstances.getInstance().setDataBaseOP_asyn(true);
+				}else if(RB_SynDB.isSelected()) {
+					toaster.success("Switch to Syn DB Visit Mode");
+					UserCircumstances.getInstance().setDataBaseOP_asyn(false);
+				}
+			}	
+        });
+        RB_SynDB.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				if(RB_AsynDB.isSelected()) {
+					toaster.success("Switch to Asyn DB Visit Mode");
+					UserCircumstances.getInstance().setDataBaseOP_asyn(true);
+				}else if(RB_SynDB.isSelected()) {
+					toaster.success("Switch to Syn DB Visit Mode");
+					UserCircumstances.getInstance().setDataBaseOP_asyn(false);
+				}
+			}	
+        });
         
         //seperator
         JSeparator separator1 = new JSeparator();

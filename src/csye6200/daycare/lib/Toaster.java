@@ -67,7 +67,7 @@ public class Toaster {
             panelToToastOn.repaint();
 
             try {
-                Thread.sleep(6000);
+                Thread.sleep(2000);
                 removeToast(toasterBody);
             } catch (InterruptedException e) {
                 e.printStackTrace();
