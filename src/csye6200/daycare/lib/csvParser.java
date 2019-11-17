@@ -10,8 +10,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import csye6200.daycare.model.Classroom;
 import csye6200.daycare.model.Student;
 import csye6200.daycare.model.Teacher;
+import csye6200.daycare.model.Vaccine;
 
 /*
  * author:jf
@@ -77,9 +79,47 @@ public class csvParser extends FileUtil {
 		return teachers;
 	}
 	
-
+	public List<Vaccine> readVaccineCSV(File fileName){
+		List<Vaccine> vaccines = new ArrayList<>();
+		try(BufferedReader input = new BufferedReader(new FileReader(fileName))) {
+			String line = null;
+			while (null != (line = input.readLine())) {
+				String[] fields = line.split(",");
+				int id = new Integer(fields[0]);
+				String name = fields[1];
+				int dose = new Integer(fields[2]);
+				String period= fields[3];
+				String category= fields[4];
+				Timestamp date = Timestamp.valueOf(fields[5]);
+				vaccines.add(new Vaccine(id, name, dose, period, category, date));
+				}
+			input.close();
+		} catch (IOException e) {
+			System.out.println("reading Error!");
+			e.printStackTrace();
+		}
+		return vaccines;
+	}
 	
-}  
+	public List<Classroom> readclassroomCSV(File fileName){
+		List<Classroom> classrooms = new ArrayList<>();
+		try(BufferedReader input = new BufferedReader(new FileReader(fileName))) {
+			String line = null;
+			while (null != (line = input.readLine())) {
+				String[] fields = line.split(",");
+				int id = new Integer(fields[0]);
+				int capacity = new Integer(fields[1]);
+				int remain = new Integer(fields[2]);
+				Timestamp date = Timestamp.valueOf(fields[3]);
+				classrooms.add(new Classroom(id, capacity, remain, date));
+				}
+			input.close();
+		} catch (IOException e) {
+			System.out.println("reading Error!");
+			e.printStackTrace();
+		}
+		return classrooms;
+	}  
      
 }
 
