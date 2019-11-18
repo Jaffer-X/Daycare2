@@ -448,25 +448,57 @@ public class AdvanceWindow extends JFrame{
     }
     
     private void RegisterEventHandler() {
-        if(RB_registerStudent.isSelected()){
-        	StudentRegisterController c = new StudentRegisterController(
-        	TF_StudentName.getText(),
-        	Integer.parseInt(TF_StudentAge.getText()),
-        	TF_StudentParentName.getText(),
-        	TF_StudentParentPhone.getText(),
-        	TF_StudentGender.getText(),
-        	TF_StudentAddress.getText(),
-        	Integer.parseInt(TF_ReadTest.getText()),
-        	Integer.parseInt(TF_SportTest.getText()),
-        	Integer.parseInt(TF_MathTest.getText()));
-        	if(c.register()) {
-        		toaster.success("register student success");
-        	}else{
-        		toaster.error("register student failed");
-        	}
-        }else {
-        	toaster.warn("register teacher");
-        }
+    	if(UserCircumstances.getInstance().isDataBaseOP_asyn()) {
+    		//async method
+    		Runnable sRegister = new StudentRegisterController(TF_StudentName.getText(),
+					Integer.parseInt(TF_StudentAge.getText()),
+					TF_StudentParentName.getText(),
+					TF_StudentParentPhone.getText(),
+					TF_StudentGender.getText(),
+					TF_StudentAddress.getText(),
+					Integer.parseInt(TF_ReadTest.getText()),
+					Integer.parseInt(TF_SportTest.getText()),
+					Integer.parseInt(TF_MathTest.getText()));
+    		new Thread(sRegister).start();
+            new Thread(() -> {
+                try {
+                	int n = 0;
+                	while(!((StudentRegisterController) sRegister).isSuccess()) {
+                		Thread.sleep(200);
+                		n++;
+                		if(n>50) {
+                			toaster.error("register student failed");
+                			return;
+                		}
+                	}
+                	toaster.success("register student success");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+    		
+    	}
+    	else{//sync method
+    		if(RB_registerStudent.isSelected()){
+    			StudentRegisterController c = new StudentRegisterController(
+    					TF_StudentName.getText(),
+    					Integer.parseInt(TF_StudentAge.getText()),
+    					TF_StudentParentName.getText(),
+    					TF_StudentParentPhone.getText(),
+    					TF_StudentGender.getText(),
+    					TF_StudentAddress.getText(),
+    					Integer.parseInt(TF_ReadTest.getText()),
+    					Integer.parseInt(TF_SportTest.getText()),
+    					Integer.parseInt(TF_MathTest.getText()));
+    			if(c.register()) {
+    				toaster.success("register student success");
+    			}else{
+    				toaster.error("register student failed");
+    			}
+    		}else {
+    			toaster.warn("register teacher");
+    		}
+    	}
     }
     
     private void ExecuteEventHandler() {

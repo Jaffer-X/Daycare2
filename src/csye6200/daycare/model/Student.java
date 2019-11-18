@@ -22,6 +22,7 @@ public class Student extends Person {
 		this.ParentName=parentName;
 		this.ParentPhone=parentPhone;
 		this.Address = Address;
+		this.gender = gender;
 		this.readTest = read;
 		this.sportTest = sport;
 		this.mathTest = math;
