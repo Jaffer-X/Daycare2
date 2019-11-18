@@ -186,7 +186,8 @@ public class MainWindow extends JFrame{
     }
     
     private void TeacherEventHandler() {
-        toaster.warn("goto teacher view event");
+        mhide();
+        TeacherWindow.getInstance().mshow();
     }
     private void StudentEventHandler() {
         mhide();
