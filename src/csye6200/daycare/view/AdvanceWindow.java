@@ -499,8 +499,6 @@ public class AdvanceWindow extends JFrame{
 						}
 					}).start();
 				}
-				
-				toaster.warn("register teacher");
 			}
 		}
 		else{//sync method
