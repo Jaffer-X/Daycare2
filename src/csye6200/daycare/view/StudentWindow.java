@@ -6,7 +6,11 @@ import java.util.Objects;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import csye6200.daycare.controller.StudentRegisterController;
+import csye6200.daycare.controller.StudentSearchController;
+import csye6200.daycare.controller.StudentSearchController.SEARCH_STUDENT;
 import csye6200.daycare.lib.*;
+import csye6200.daycare.main.UserCircumstances;
 import csye6200.daycare.model.Person;
 import csye6200.daycare.model.Student;
 /*
@@ -19,9 +23,10 @@ public class StudentWindow extends JFrame{
 		return instance;
 	}
 	
+	private JPanel mainJPanel;
 	private Toaster toaster;
 	private ButtonGroup searchGroup;
-	private mRadioButton RB_searchTeacher;
+	private mRadioButton RB_searchStudent;
 	private mRadioButton RB_searchRecord;
 	private mComboBox CB_Student;
 	private mTextField TF_Student;
@@ -39,21 +44,26 @@ public class StudentWindow extends JFrame{
 	private mCheckBox CKB_record1;
 	private mCheckBox CKB_record2;
 	private mCheckBox CKB_record3;
+	private mTable table;
+	private mScrollPane mSP;
+	
+	private String [] colTitles = {"ID","Name", "Age"};
+    private Object[][] data= {new Object[]{1, 2, 3}, new Object[]{4, 5, 6},new Object[]{7, 8, 9}};
 	
     public void start() {
-        JPanel mainJPanel = getMainJPanel();
+        mainJPanel = getMainJPanel();
         
         //search group
         searchGroup = new ButtonGroup();
-        RB_searchTeacher = new mRadioButton("Search Student");
+        RB_searchStudent = new mRadioButton("Search Student");
         RB_searchRecord = new mRadioButton("Search Record");
-        searchGroup.add(RB_searchTeacher);
+        searchGroup.add(RB_searchStudent);
         searchGroup.add(RB_searchRecord);
-        mainJPanel.add(RB_searchTeacher);
+        mainJPanel.add(RB_searchStudent);
         mainJPanel.add(RB_searchRecord);
-        RB_searchTeacher.setBounds(20,20,200,40);
+        RB_searchStudent.setBounds(20,20,200,40);
         RB_searchRecord.setBounds(20,220,200,40);
-        RB_searchTeacher.setSelected(true);
+        RB_searchStudent.setSelected(true);
         
         //student Area
         JLabel L_keywordS = new JLabel("Keyword:");
@@ -65,8 +75,8 @@ public class StudentWindow extends JFrame{
         CB_Student=new mComboBox();    
         CB_Student.addItem("Name");    
         CB_Student.addItem("Age");
-        CB_Student.addItem("ParentName");
-        CB_Student.addItem("ParentPhone");
+        CB_Student.addItem("parentName");
+        CB_Student.addItem("parentPhone");
         CB_Student.addItem("Address");
         mainJPanel.add(CB_Student);
         CB_Student.setBounds(150,70,200,40);
@@ -96,7 +106,7 @@ public class StudentWindow extends JFrame{
         CKB_student2.setBounds(400,120,150,44);
         CKB_student3.setBounds(550,120,150,44);
         
-        //Teacher Area
+        //Record Area
         JLabel L_keywordR = new JLabel("Keyword:");
         mainJPanel.add(L_keywordR);
         L_keywordR.setForeground(Color.white);
@@ -106,7 +116,6 @@ public class StudentWindow extends JFrame{
         CB_Teacher=new mComboBox();    
         CB_Teacher.addItem("Name");    
         CB_Teacher.addItem("Age");
-        CB_Teacher.addItem("Wage");
         mainJPanel.add(CB_Teacher);
         CB_Teacher.setBounds(150,270,200,40);
         
@@ -131,9 +140,9 @@ public class StudentWindow extends JFrame{
         mainJPanel.add(CKB_record1); 
         mainJPanel.add(CKB_record2); 
         mainJPanel.add(CKB_record3); 
-        CKB_record1.setBounds(250,320,150,44);
-        CKB_record2.setBounds(400,320,150,44);
-        CKB_record3.setBounds(550,320,150,44);
+        CKB_record1.setBounds(250,370,150,44);
+        CKB_record2.setBounds(400,370,150,44);
+        CKB_record3.setBounds(550,370,150,44);
         
         //seperator
         JSeparator separator1 = new JSeparator();
@@ -162,10 +171,12 @@ public class StudentWindow extends JFrame{
         addBackButton(mainJPanel);
         
         //Table
-        
-        String [] colTitles = {"ID","Name", "Age"};
-        Object[][] data= {new Object[]{1, 2, 3}, new Object[]{4, 5, 6},new Object[]{7, 8, 9}};
-        simpleTable(colTitles,data,mainJPanel);
+    	table = new mTable(colTitles,data);
+        mSP = new mScrollPane();
+        mSP.setViewportView(table);
+        mSP.getViewport().setBackground(UIUtils.COLOR_BACKGROUND);
+    	mainJPanel.add(mSP);
+    	mSP.setBounds(0, 420, 1080, 340);
         
         this.add(mainJPanel);
         this.pack();
@@ -178,12 +189,6 @@ public class StudentWindow extends JFrame{
         toaster = new Toaster(mainJPanel);
     }
     
-    private void simpleTable(String[] colnames, Object[][] data, JPanel p) {
-    	mTable table = new mTable(colnames,data);
-    	p.add(table);
-    	table.setBounds(0, 420, 1080, 340);
-    }
-
     private JPanel getMainJPanel() {
         this.setUndecorated(true);
 
@@ -322,11 +327,104 @@ public class StudentWindow extends JFrame{
         });
     }
     
-    private void SearchEventHandler() {
-        toaster.warn("search");
+    private void refreshUITable() {
+    	
     }
+    
+    private void SearchEventHandler() {
+    	StudentSearchController.SEARCH_STUDENT current = null;
+		if (UserCircumstances.getInstance().isDataBaseOP_asyn()) {
+			if (RB_searchStudent.isSelected()) {
+				if (RB_studentBasic.isSelected())
+					current = SEARCH_STUDENT.STUDENT_BASIC;
+				else if (RB_studentImmunization.isSelected())
+					current = SEARCH_STUDENT.STUDENT_IMMUNIZATION;
+				Runnable sSearch = new StudentSearchController(CB_Student.getSelectedItem().toString(),
+						TF_Student.getText(), current);
+				new Thread(sSearch).start();
+				new Thread(() -> {
+					try {
+						int n = 0;
+						while (!((StudentSearchController) sSearch).isSuccess()) {
+							Thread.sleep(200);
+							n++;
+							if (n > 100) {
+								toaster.error("search failed");
+								return;
+							}
+						}
+						toaster.success("search success");
+//						System.out.println(((StudentSearchController) sSearch).getContent().toString());
+//						System.out.println(((StudentSearchController) sSearch).getTitle().toString());
+				        DefaultTableModel model = new DefaultTableModel(((StudentSearchController) sSearch).getDataString(),((StudentSearchController) sSearch).getTitle().toArray());
+				    	table.removeAll();
+				    	table.setModel(model);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}).start();
+			} else if (RB_searchRecord.isSelected()) {
+//				if (RB_teachingRecord.isSelected())
+//					current = SEARCH.RECORD_TEACHING;
+//				else if (RB_immunizationRecord.isSelected())
+//					current = SEARCH.RECORD_IMMUNIZATION;
+//				Runnable sSearch = new StudentSearchController(CB_Teacher.getSelectedItem().toString(),
+//						TF_Record.getText(), current);
+//				new Thread(sSearch).start();
+//				new Thread(() -> {
+//					try {
+//						int n = 0;
+//						while (!((StudentSearchController) sSearch).isSuccess()) {
+//							Thread.sleep(200);
+//							n++;
+//							if (n > 50) {
+//								toaster.error("search failed");
+//								return;
+//							}
+//						}
+//						toaster.success("search success");
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//				}).start();
+			}
+		}
+    	else{//sync method
+			if (RB_searchStudent.isSelected()) {
+				if (RB_studentBasic.isSelected())
+					current = SEARCH_STUDENT.STUDENT_BASIC;
+				else if (RB_studentImmunization.isSelected())
+					current = SEARCH_STUDENT.STUDENT_IMMUNIZATION;
+				StudentSearchController s = new StudentSearchController(CB_Student.getSelectedItem().toString(),
+						TF_Student.getText(), current);
+    			if(s.query()) {
+    				toaster.success("search success");
+    			}else{
+    				toaster.error("search failed");
+    			}
+			} else if (RB_searchRecord.isSelected()) {
+//				if (RB_teachingRecord.isSelected())
+//					current = SEARCH.RECORD_TEACHING;
+//				else if (RB_immunizationRecord.isSelected())
+//					current = SEARCH.RECORD_IMMUNIZATION;
+//				StudentSearchController s = new StudentSearchController(CB_Teacher.getSelectedItem().toString(),
+//						TF_Record.getText(), current);
+//    			if(s.query()) {
+//    				toaster.success("search success");
+//    			}else{
+//    				toaster.error("search failed");
+//    			}
+			}			
+    	}
+		refreshUITable();
+    }
+
     private void ModifyEventHandler() {
-        toaster.warn("modify");
+    	String [] colTitles2 = {"ID","Name", "Age","ff","gg"};
+        Object[][] data2= {new Object[]{1, 2, 3}, new Object[]{4, 5, 6},new Object[]{7, 8, 9},new Object[]{7, 8, 9},new Object[]{7, 8, 9}};
+        DefaultTableModel model = new DefaultTableModel(data2, colTitles2);
+    	table.removeAll();
+    	table.setModel(model);
     }
     private void ImportEventHandler() {
         toaster.warn("import");

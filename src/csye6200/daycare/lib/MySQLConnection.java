@@ -45,15 +45,19 @@ public class MySQLConnection {
     private List convertList(ResultSet rs) throws SQLException {
         ResultSetMetaData md = rs.getMetaData();
         int columnCount = md.getColumnCount();
-        while (rs.next()) {
+        boolean firstTime = true;
+        while (rs.next()) {     	
             //Map rowData = new TreeMap();
             ArrayList rowList = new ArrayList();
             for (int i = 1; i <= columnCount; i++) {
             	rowList.add(rs.getObject(i));
-            	titleResult.add(md.getColumnName(i));
+            	if(firstTime) {
+            		titleResult.add(md.getColumnName(i));
+            	}
                 //rowData.put(md.getColumnName(i), rs.getObject(i));
                 //System.out.println(md.getColumnName(i)+":"+rs.getObject(i)+".");
             }
+            firstTime=false;
             //list.add(rowData);
             dataResult.add(rowList);
         }
