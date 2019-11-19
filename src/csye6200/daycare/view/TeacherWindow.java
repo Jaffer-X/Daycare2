@@ -10,7 +10,10 @@ import java.util.Objects;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import csye6200.daycare.controller.StudentSearchController;
+import csye6200.daycare.controller.TeacherSearchController;
 import csye6200.daycare.lib.*;
+import csye6200.daycare.main.UserCircumstances;
 import csye6200.daycare.model.Person;
 import csye6200.daycare.model.Student;
 /*
@@ -36,7 +39,11 @@ public class TeacherWindow extends JFrame{
 	private mTextField TF_record;
 	private mComboBox COB_record;
 	private Toaster toaster;
-	
+	private mTable table;
+	private mScrollPane mSP;
+	private String [] colTitles = {"ID","Name", "Age"};
+	private Object[][] data= {new Object[]{1, 2, 3}, new Object[]{4, 5, 6},new Object[]{7, 8, 9}};
+
 	public void start() {
 		JPanel mainpanel = getMainJPanel();
 		
@@ -76,7 +83,7 @@ public class TeacherWindow extends JFrame{
 		
 		JLabel rkeyword = new JLabel("Keyword:");
 		rkeyword.setForeground(Color.WHITE);
-		rkeyword.setBounds(50,400,100,40);
+		rkeyword.setBounds(50,300,100,40);
 		rkeyword.setFont(UIUtils.FONT_GENERAL_UI);
 		mainpanel.add(rkeyword);
 		COB_record = new mComboBox();
@@ -85,10 +92,10 @@ public class TeacherWindow extends JFrame{
 		COB_record.addItem("Parent Name");
 		COB_record.addItem("Address");
 		COB_record.addItem("Parent Phone");
-		COB_record.setBounds(150,400,200,40);
+		COB_record.setBounds(150,300,200,40);
 		mainpanel.add(COB_record);
 		TF_record = new mTextField();
-		TF_record.setBounds(400,400,200,40);
+		TF_record.setBounds(400,300,200,40);
 		mainpanel.add(TF_record);
 		
 		JSeparator separator1 = new JSeparator();
@@ -115,9 +122,12 @@ public class TeacherWindow extends JFrame{
         addExportButton(mainpanel);
         addBackButton(mainpanel);
 		
-        String [] colTitles = {"ID","Name", "Age"};
-        Object[][] data= {new Object[]{1, 2, 3}, new Object[]{4, 5, 6},new Object[]{7, 8, 9}};
-        simpleTable(colTitles,data,mainpanel);
+        table = new mTable(colTitles,data);
+        mSP = new mScrollPane();
+        mSP.setViewportView(table);
+        mSP.getViewport().setBackground(UIUtils.COLOR_BACKGROUND);
+    	mainpanel.add(mSP);
+    	mSP.setBounds(0, 420, 1080, 340);
         
         this.add(mainpanel);
         this.pack();
@@ -265,16 +275,59 @@ public class TeacherWindow extends JFrame{
         });
     }
     
-    private void simpleTable(String[] colnames, Object[][] data, JPanel p) {
-    	mTable table = new mTable(colnames,data);
-    	p.add(table);
-    	table.setBounds(0, 420, 1080, 340);
-    }
+    
+//    private void simpleTable(String[] colnames, Object[][] data, JPanel p) {
+//    	mTable table = new mTable(colnames,data);
+//    	p.add(table);
+//    	table.setBounds(0, 420, 1080, 340);
+//    }
     
     private void SearchEventHandler() {
-        toaster.warn("search");
+    	if (UserCircumstances.getInstance().isDataBaseOP_asyn()) {
+    		if (RB_searchTeacher.isSelected()) {
+    			Runnable tSearch = new TeacherSearchController(COB_teacher.getSelectedItem().toString(),TF_teacher.getText());
+    			new Thread(tSearch).start();
+    			new Thread(() -> {
+    				try {
+    					int n = 0;
+    					while (!((TeacherSearchController) tSearch).isSuccess()) {
+    						Thread.sleep(200);
+    						n++;
+    						if (n > 100) {
+    							toaster.error("search failed");
+    							return;
+    						}
+    					}
+    					toaster.success("search teacher success!");
+    					DefaultTableModel model = new DefaultTableModel(((TeacherSearchController) tSearch).getDataString(),((TeacherSearchController) tSearch).getTitle().toArray());
+    					table.removeAll();
+    					table.setModel(model);
+    				} catch (InterruptedException e) {
+    					e.printStackTrace();
+    				}
+    			}).start();
+    		}else if(RB_searchRecord.isSelected()) {
+    			toaster.warn("search record");
+    		}
+    	}else {
+    		if(RB_searchTeacher.isSelected()) {
+    			TeacherSearchController tsearch = new TeacherSearchController(COB_teacher.getSelectedItem().toString(),TF_teacher.getText());
+    			if(tsearch.query()) {
+    				toaster.success("search teacher success!");
+    			}else {
+    				toaster.error("search teacher failed!");
+    			}
+    		}else if(RB_searchRecord.isSelected()) {
+    			toaster.warn("search record");
+    		}
+    	}
+    	refreshUITable();
     }
-    private void ModifyEventHandler() {
+    private void refreshUITable() {
+		// TODO Auto-generated method stub
+		
+	}
+	private void ModifyEventHandler() {
         toaster.warn("modify");
     }
     private void ImportEventHandler() {
