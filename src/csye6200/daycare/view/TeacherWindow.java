@@ -9,6 +9,8 @@ import java.awt.event.WindowEvent;
 import java.util.Objects;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import csye6200.daycare.controller.TeacherRecordSearchController;
 import csye6200.daycare.controller.TeacherSearchController;
 import csye6200.daycare.lib.*;
 import csye6200.daycare.main.UserCircumstances;
@@ -306,7 +308,27 @@ public class TeacherWindow extends JFrame{
     				}
     			}).start();
     		}else if(RB_searchRecord.isSelected()) {
-    			toaster.warn("search record");
+    			Runnable rSearch = new TeacherRecordSearchController(COB_record.getSelectedItem().toString(),TF_record.getText());
+    			new Thread(rSearch).start();
+    			new Thread(() -> {
+    				try {
+    					int n = 0;
+    					while(!((TeacherRecordSearchController) rSearch).isSuccess()) {
+    						Thread.sleep(200);
+    						n++;
+    						if(n > 100) {
+    							toaster.error("search teaching record failed!");
+    							return;
+    						}
+    					}
+    					toaster.success("search teahcing record success!");
+    					DefaultTableModel rmodel = new DefaultTableModel(((TeacherRecordSearchController) rSearch).getDataString(),((TeacherRecordSearchController) rSearch).getTitle().toArray());
+    					table.removeAll();
+    					table.setModel(rmodel);
+    				}catch (InterruptedException e) {
+    					e.printStackTrace();
+    				}
+    			}).start();
     		}
     	}else {
     		if(RB_searchTeacher.isSelected()) {
@@ -317,7 +339,12 @@ public class TeacherWindow extends JFrame{
     				toaster.error("search teacher failed!");
     			}
     		}else if(RB_searchRecord.isSelected()) {
-    			toaster.warn("search record");
+    			TeacherRecordSearchController rsearch = new TeacherRecordSearchController(COB_record.getSelectedItem().toString(),TF_record.getText());
+    			if(rsearch.query()) {
+    				toaster.success("search teaching record success!");
+    			}else {
+    				toaster.error("search teaching record failed!");
+    			}
     		}
     	}
     	refreshUITable();
