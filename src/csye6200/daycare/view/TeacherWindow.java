@@ -9,13 +9,10 @@ import java.awt.event.WindowEvent;
 import java.util.Objects;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
-import csye6200.daycare.controller.StudentSearchController;
 import csye6200.daycare.controller.TeacherSearchController;
 import csye6200.daycare.lib.*;
 import csye6200.daycare.main.UserCircumstances;
-import csye6200.daycare.model.Person;
-import csye6200.daycare.model.Student;
+
 /*
  * author:jf
  */
@@ -23,7 +20,7 @@ public class TeacherWindow extends JFrame{
 	private static final TeacherWindow instance = new TeacherWindow();
 	private TeacherWindow() {
 		start();
-		}
+	}
 	public static TeacherWindow getInstance() {
 		return instance;
 	}
@@ -87,11 +84,13 @@ public class TeacherWindow extends JFrame{
 		rkeyword.setFont(UIUtils.FONT_GENERAL_UI);
 		mainpanel.add(rkeyword);
 		COB_record = new mComboBox();
-		COB_record.addItem("Name");
-		COB_record.addItem("Age");
-		COB_record.addItem("Parent Name");
-		COB_record.addItem("Address");
-		COB_record.addItem("Parent Phone");
+		COB_record.addItem("StudentID");
+		COB_record.addItem("TeacherID");
+		COB_record.addItem("ClassroomID");
+		COB_record.addItem("GroupID");
+		COB_record.addItem("Status");
+		COB_record.addItem("Period");
+		COB_record.addItem("Rank");
 		COB_record.setBounds(150,300,200,40);
 		mainpanel.add(COB_record);
 		TF_record = new mTextField();
