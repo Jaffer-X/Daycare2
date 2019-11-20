@@ -1,0 +1,33 @@
+package csye6200.daycare.model;
+/*
+ * author:jf
+ */
+public class Teacher extends Person {
+	private int TeacherId;
+	private int Wage;
+	public int getTeacherId() {
+		return TeacherId;
+	}
+	public void setTeacherId(int teacherId) {
+		TeacherId = teacherId;
+	}
+	public int getWage() {
+		return Wage;
+	}
+	public void setWage(int wage) {
+		Wage = wage;
+	}
+	@Override
+	public String toString() {
+		return "Teacher [TeacherId=" + TeacherId + ", Namw=" + getName() + ", Age="
+				+ getAge() + ", Wage=" + Wage + "]";
+	}
+	public Teacher( int teacherId, String name, int age, int wage) {
+		super(name, age, datetime);
+		TeacherId = teacherId;
+		Wage = wage;
+	}
+	
+	
+	
+}

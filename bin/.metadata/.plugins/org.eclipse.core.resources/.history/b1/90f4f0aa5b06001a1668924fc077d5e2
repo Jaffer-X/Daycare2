@@ -1,0 +1,41 @@
+package csye6200.daycare.model;
+
+import java.sql.Timestamp;
+
+/*
+ * author:jf
+ */
+public class Person {
+	private String name;
+	private int Age;
+	private Timestamp Timestamp;
+	public Person(String name, int age, Timestamp datetime) {
+		super();
+		this.name = name;
+		this.Age = age;
+		this.Timestamp = datetime;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getAge() {
+		return Age;
+	}
+	public void setAge(int age) {
+		this.Age = age;
+	}
+	public Timestamp getDatetime() {
+		return Timestamp;
+	}
+	public void setDatetime(Timestamp datetime) {
+		this.Timestamp = datetime;
+	}
+	@Override
+	public String toString() {
+		return "Person [name=" + name + ", age=" + Age + ", datetime=" + Timestamp + "]";
+	}
+	
+}

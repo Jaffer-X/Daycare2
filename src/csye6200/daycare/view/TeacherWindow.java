@@ -8,11 +8,16 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Objects;
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
+import csye6200.daycare.controller.TeacherModifyController;
+import csye6200.daycare.controller.TeacherRecordSearchController;
+import csye6200.daycare.controller.TeacherSearchController;
 import csye6200.daycare.lib.*;
-import csye6200.daycare.model.Person;
-import csye6200.daycare.model.Student;
+import csye6200.daycare.main.UserCircumstances;
+
 /*
  * author:jf
  */
@@ -20,7 +25,7 @@ public class TeacherWindow extends JFrame{
 	private static final TeacherWindow instance = new TeacherWindow();
 	private TeacherWindow() {
 		start();
-		}
+	}
 	public static TeacherWindow getInstance() {
 		return instance;
 	}
@@ -36,7 +41,16 @@ public class TeacherWindow extends JFrame{
 	private mTextField TF_record;
 	private mComboBox COB_record;
 	private Toaster toaster;
-	
+	private mTable table;
+	private mScrollPane mSP;
+	private String [] colTitles = {"ID","Name", "Age"};
+	private Object[][] data= {new Object[]{1, 2, 3}, new Object[]{4, 5, 6},new Object[]{7, 8, 9}};
+	private DefaultTableModel model;
+	private int firstchangerow;
+	private int lastchangerow;
+	private int changecolumn;
+	private int tablechangetype;
+
 	public void start() {
 		JPanel mainpanel = getMainJPanel();
 		
@@ -76,19 +90,21 @@ public class TeacherWindow extends JFrame{
 		
 		JLabel rkeyword = new JLabel("Keyword:");
 		rkeyword.setForeground(Color.WHITE);
-		rkeyword.setBounds(50,400,100,40);
+		rkeyword.setBounds(50,300,100,40);
 		rkeyword.setFont(UIUtils.FONT_GENERAL_UI);
 		mainpanel.add(rkeyword);
 		COB_record = new mComboBox();
-		COB_record.addItem("Name");
-		COB_record.addItem("Age");
-		COB_record.addItem("Parent Name");
-		COB_record.addItem("Address");
-		COB_record.addItem("Parent Phone");
-		COB_record.setBounds(150,400,200,40);
+		COB_record.addItem("StudentID");
+		COB_record.addItem("TeacherID");
+		COB_record.addItem("ClassroomID");
+		COB_record.addItem("GroupID");
+		COB_record.addItem("Status");
+		COB_record.addItem("Period");
+		COB_record.addItem("Rank");
+		COB_record.setBounds(150,300,200,40);
 		mainpanel.add(COB_record);
 		TF_record = new mTextField();
-		TF_record.setBounds(400,400,200,40);
+		TF_record.setBounds(400,300,200,40);
 		mainpanel.add(TF_record);
 		
 		JSeparator separator1 = new JSeparator();
@@ -115,9 +131,13 @@ public class TeacherWindow extends JFrame{
         addExportButton(mainpanel);
         addBackButton(mainpanel);
 		
-        String [] colTitles = {"ID","Name", "Age"};
-        Object[][] data= {new Object[]{1, 2, 3}, new Object[]{4, 5, 6},new Object[]{7, 8, 9}};
-        simpleTable(colTitles,data,mainpanel);
+        table = new mTable(colTitles,data);
+        mSP = new mScrollPane();
+        mSP.setViewportView(table);
+        mSP.getViewport().setBackground(UIUtils.COLOR_BACKGROUND);
+    	mainpanel.add(mSP);
+    	mSP.setBounds(0, 420, 1080, 340);
+    	
         
         this.add(mainpanel);
         this.pack();
@@ -265,17 +285,161 @@ public class TeacherWindow extends JFrame{
         });
     }
     
-    private void simpleTable(String[] colnames, Object[][] data, JPanel p) {
-    	mTable table = new mTable(colnames,data);
-    	p.add(table);
-    	table.setBounds(0, 420, 1080, 340);
-    }
+    
+//    private void simpleTable(String[] colnames, Object[][] data, JPanel p) {
+//    	mTable table = new mTable(colnames,data);
+//    	p.add(table);
+//    	table.setBounds(0, 420, 1080, 340);
+//    }
     
     private void SearchEventHandler() {
-        toaster.warn("search");
+    	if (UserCircumstances.getInstance().isDataBaseOP_asyn()) {
+    		if (RB_searchTeacher.isSelected()) {
+    			Runnable tSearch = new TeacherSearchController(COB_teacher.getSelectedItem().toString(),TF_teacher.getText());
+    			new Thread(tSearch).start();
+    			new Thread(() -> {
+    				try {
+    					int n = 0;
+    					while (!((TeacherSearchController) tSearch).isSuccess()) {
+    						Thread.sleep(200);
+    						n++;
+    						if (n > 100) {
+    							toaster.error("search failed");
+    							return;
+    						}
+    					}
+    					toaster.success("search teacher success!");
+    					 model = new DefaultTableModel(((TeacherSearchController) tSearch).getDataString(),((TeacherSearchController) tSearch).getTitle().toArray());
+    					table.removeAll();
+    					table.setModel(model);
+    					model.addTableModelListener(new TableModelListener() {
+    			    		public void tableChanged(TableModelEvent e) {
+    			    		 firstchangerow = e.getFirstRow();
+    			    		 lastchangerow = e.getLastRow();
+    			    		 changecolumn = e.getColumn();
+    			    		 tablechangetype = e.getType();
+    			    		}
+    			    	});
+    				} catch (InterruptedException e) {
+    					e.printStackTrace();
+    				}
+    			}).start();
+    		}else if(RB_searchRecord.isSelected()) {
+    			Runnable rSearch = new TeacherRecordSearchController(COB_record.getSelectedItem().toString(),TF_record.getText());
+    			new Thread(rSearch).start();
+    			new Thread(() -> {
+    				try {
+    					int n = 0;
+    					while(!((TeacherRecordSearchController) rSearch).isSuccess()) {
+    						Thread.sleep(200);
+    						n++;
+    						if(n > 100) {
+    							toaster.error("search teaching record failed!");
+    							return;
+    						}
+    					}
+    					toaster.success("search teahcing record success!");
+    					DefaultTableModel rmodel = new DefaultTableModel(((TeacherRecordSearchController) rSearch).getDataString(),((TeacherRecordSearchController) rSearch).getTitle().toArray());
+    					table.removeAll();
+    					table.setModel(rmodel);
+    				}catch (InterruptedException e) {
+    					e.printStackTrace();
+    				}
+    			}).start();
+    		}
+    	}else {
+    		if(RB_searchTeacher.isSelected()) {
+    			TeacherSearchController tsearch = new TeacherSearchController(COB_teacher.getSelectedItem().toString(),TF_teacher.getText());
+    			if(tsearch.query()) {
+    				toaster.success("search teacher success!");
+    			}else {
+    				toaster.error("search teacher failed!");
+    			}
+    		}else if(RB_searchRecord.isSelected()) {
+    			TeacherRecordSearchController rsearch = new TeacherRecordSearchController(COB_record.getSelectedItem().toString(),TF_record.getText());
+    			if(rsearch.query()) {
+    				toaster.success("search teaching record success!");
+    			}else {
+    				toaster.error("search teaching record failed!");
+    			}
+    		}
+    	}
+    	refreshUITable();
     }
-    private void ModifyEventHandler() {
-        toaster.warn("modify");
+    private void refreshUITable() {
+		// TODO Auto-generated method stub
+		
+	}
+	private void ModifyEventHandler() {
+		if (UserCircumstances.getInstance().isDataBaseOP_asyn()) {
+			if(RB_searchTeacher.isSelected()) {
+				for(int row = firstchangerow; row<= lastchangerow; row++) {
+					Object idobj =  model.getValueAt(row, 0);
+					Object nameobj =  model.getValueAt(row, 1);
+					Object ageobj =  model.getValueAt(row, 2);
+					Object wageobj =  model.getValueAt(row, 3);
+					
+					int id = 0;
+                    try {
+                        id = Integer.parseInt(""+ idobj);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    
+                    String name = "";
+                    try {
+                        name = String.valueOf(nameobj);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    
+                    int age = 0;
+                    try {
+                        age = Integer.parseInt(""+ ageobj);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    
+                    int wage = 0;
+                    try {
+                        wage = Double.valueOf((String) wageobj).intValue();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+          
+                    	TeacherModifyController tmodify = new TeacherModifyController(id,name,age,wage);
+                   if(tmodify.update()) {
+                	   toaster.success("update success!");
+                   }else {
+                	   toaster.error("update wrong!");
+                   }
+                    
+//                    Runnable tModify = new TeacherModifyController(id,name,age,wage);
+//                    new Thread(tModify).start();
+//        			new Thread(() -> {
+//        				try {
+//        					int n = 0;
+//        					while (!((TeacherModifyController) tModify).isSuccess()) {
+//        						Thread.sleep(200);
+//        						n++;
+//        						if (n > 100) {
+//        							toaster.error("modify failed");
+//        							return;
+//        						}
+//        					}
+//      
+//       					table.removeAll();
+//       					table.setModel(model);
+//       				} catch (InterruptedException e) {
+//       					e.printStackTrace();
+//       				}
+//       			}).start();
+				}//toaster.success("modify teacher success!");
+				
+			}
+			
+		}
+       // toaster.warn("modify");
     }
     private void ImportEventHandler() {
         toaster.warn("import");

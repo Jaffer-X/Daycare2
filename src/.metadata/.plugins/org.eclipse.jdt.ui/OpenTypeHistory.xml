@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<typeInfoHistroy>
+<typeInfo handle="=Daycare/src&lt;csye6200.daycare.lib{FileUtil.java[FileUtil" modifiers="1" timestamp="1573600325611"/>
+<typeInfo handle="=Daycare/src&lt;csye6200.daycare.model{AbstractGroup.java[AbstractGroup" modifiers="1" timestamp="1573594350902"/>
+<typeInfo handle="=Daycare/src&lt;csye6200.daycare.model{AbstractGroupFactory.java[AbstractGroupFactory" modifiers="1" timestamp="1573594391778"/>
+<typeInfo handle="=Daycare/src&lt;csye6200.daycare.model{AbstractRecord.java[AbstractRecord" modifiers="1" timestamp="1573594880184"/>
+<typeInfo handle="=Daycare/src&lt;csye6200.daycare.controller{RecordSearchController.java[RecordSearchController" modifiers="1" timestamp="1573599495006"/>
+<typeInfo handle="=Daycare/src&lt;csye6200.daycare.controller{AbstractModifyController.java[AbstractModifyController" modifiers="1" timestamp="1573599713483"/>
+<typeInfo handle="=Daycare/src&lt;csye6200.daycare.controller{AbstractSearchController.java[AbstractSearchController" modifiers="1" timestamp="1573599495066"/>
+<typeInfo handle="=Daycare/src&lt;csye6200.daycare.controller{AbstractRegisterController.java[AbstractRegisterController" modifiers="1" timestamp="1573600010371"/>
+</typeInfoHistroy>

@@ -6,6 +6,7 @@ import java.util.Objects;
 import javax.swing.*;
 
 import csye6200.daycare.controller.StudentRegisterController;
+import csye6200.daycare.controller.TeacherRegisterController;
 import csye6200.daycare.lib.*;
 import csye6200.daycare.main.UserCircumstances;
 import csye6200.daycare.main.UserCircumstances.ASSIGN_STRATEGY;
@@ -219,6 +220,7 @@ public class AdvanceWindow extends JFrame{
 				};
 			}	
         });
+        
         RB_AISVMStrategy.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -474,30 +476,65 @@ public class AdvanceWindow extends JFrame{
 					}
 				}).start();
 			}else {
-				toaster.warn("register teacher");
+				if(RB_registerTeacher.isSelected()) {
+					Runnable tRegister = new TeacherRegisterController(
+							TF_TeacherName.getText(),
+							Integer.parseInt(TF_TeacherAge.getText()),
+							Integer.parseInt(TF_TeacherWage.getText()));
+					new Thread(tRegister).start();
+					new Thread(()-> {
+						try {
+							int n = 0;
+							while(!((TeacherRegisterController) tRegister).isSuccess()) {
+								Thread.sleep(200);
+								n++;
+								if(n >50) {
+									toaster.error("register teacher failed!");
+									return;
+								}
+							}
+							toaster.success("register teacher success!");
+						}catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}).start();
+				}
 			}
 		}
-    	else{//sync method
-    		if(RB_registerStudent.isSelected()){
-    			StudentRegisterController c = new StudentRegisterController(
-    					TF_StudentName.getText(),
-    					Integer.parseInt(TF_StudentAge.getText()),
-    					TF_StudentParentName.getText(),
-    					TF_StudentParentPhone.getText(),
-    					TF_StudentGender.getText(),
-    					TF_StudentAddress.getText(),
-    					Integer.parseInt(TF_ReadTest.getText()),
-    					Integer.parseInt(TF_SportTest.getText()),
-    					Integer.parseInt(TF_MathTest.getText()));
-    			if(c.register()) {
-    				toaster.success("register student success");
-    			}else{
-    				toaster.error("register student failed");
-    			}
-    		}else {
-    			toaster.warn("register teacher");
-    		}
-    	}
+		else{//sync method
+			if(RB_registerStudent.isSelected()){
+				StudentRegisterController c = new StudentRegisterController(
+						TF_StudentName.getText(),
+						Integer.parseInt(TF_StudentAge.getText()),
+						TF_StudentParentName.getText(),
+						TF_StudentParentPhone.getText(),
+						TF_StudentGender.getText(),
+						TF_StudentAddress.getText(),
+						Integer.parseInt(TF_ReadTest.getText()),
+						Integer.parseInt(TF_SportTest.getText()),
+						Integer.parseInt(TF_MathTest.getText()));
+				if(c.register()) {
+					toaster.success("register student success");
+				}else{
+					toaster.error("register student failed");
+				}
+			}else {
+				if(RB_registerTeacher.isSelected()) {
+					TeacherRegisterController tr = new TeacherRegisterController(
+							TF_TeacherName.getText(),
+							Integer.parseInt(TF_TeacherAge.getText()),
+							Integer.parseInt(TF_TeacherWage.getText()));
+					if(tr.register()) {
+						toaster.success("register teacher success!");
+					}else {
+						toaster.error("register teacher failed!");
+					}
+
+
+				}
+
+			}
+		}
     }
     
     private void ExecuteEventHandler() {

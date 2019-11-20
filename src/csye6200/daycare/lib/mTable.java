@@ -10,10 +10,12 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.event.TableModelListener;
 
-public class mTable extends JTable{
+public class mTable extends JTable {
     private Shape shape;
     private Color borderColor = Color.white;
+    private Object[][] data;
     public mTable() {
         setOpaque(false);
         setBackground(UIUtils.COLOR_BACKGROUND);
@@ -63,4 +65,12 @@ public class mTable extends JTable{
         borderColor = color;
         repaint();
     }
+    
+    @Override  
+    public boolean isCellEditable(int rowIndex, int columnIndex)  
+    {  
+    	return true;
+    }
+    
+   
 }

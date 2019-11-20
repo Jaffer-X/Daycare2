@@ -8,6 +8,12 @@ import java.sql.Timestamp;
 public class Teacher extends Person {
 	private int TeacherId;
 	private int Wage;
+	
+	public Teacher(String name, int age, int wage){
+		super(name,age);
+		this.Wage = wage;
+	}
+	
 	public int getTeacherId() {
 		return TeacherId;
 	}
