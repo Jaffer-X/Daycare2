@@ -4,8 +4,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Objects;
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
+import csye6200.daycare.controller.ModifyController;
 import csye6200.daycare.controller.StudentRegisterController;
 import csye6200.daycare.controller.StudentSearchController;
 import csye6200.daycare.controller.StudentSearchController.SEARCH_STUDENT;
@@ -46,6 +49,12 @@ public class StudentWindow extends JFrame{
 	private mCheckBox CKB_record3;
 	private mTable table;
 	private mScrollPane mSP;
+	
+	private int firstchangerow;
+	private int lastchangerow;
+	private int changecolumn;
+	private int tablechangetype;
+	private DefaultTableModel smodel;
 	
 	private String [] colTitles = {"ID","Name", "Age"};
     private Object[][] data= {new Object[]{1, 2, 3}, new Object[]{4, 5, 6},new Object[]{7, 8, 9}};
@@ -356,9 +365,17 @@ public class StudentWindow extends JFrame{
 						toaster.success("search success");
 //						System.out.println(((StudentSearchController) sSearch).getContent().toString());
 //						System.out.println(((StudentSearchController) sSearch).getTitle().toString());
-				        DefaultTableModel model = new DefaultTableModel(((StudentSearchController) sSearch).getDataString(),((StudentSearchController) sSearch).getTitle().toArray());
+				        smodel = new DefaultTableModel(((StudentSearchController) sSearch).getDataString(),((StudentSearchController) sSearch).getTitle().toArray());
 				    	table.removeAll();
-				    	table.setModel(model);
+				    	table.setModel(smodel);
+				    	smodel.addTableModelListener(new TableModelListener() {
+    			    		public void tableChanged(TableModelEvent e) {
+    			    		 firstchangerow = e.getFirstRow();
+    			    		 lastchangerow = e.getLastRow();
+    			    		 changecolumn = e.getColumn();
+    			    		 tablechangetype = e.getType();
+    			    		}
+    			    	});
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -420,11 +437,27 @@ public class StudentWindow extends JFrame{
     }
 
     private void ModifyEventHandler() {
-    	String [] colTitles2 = {"ID","Name", "Age","ff","gg"};
-        Object[][] data2= {new Object[]{1, 2, 3}, new Object[]{4, 5, 6},new Object[]{7, 8, 9},new Object[]{7, 8, 9},new Object[]{7, 8, 9}};
-        DefaultTableModel model = new DefaultTableModel(data2, colTitles2);
-    	table.removeAll();
-    	table.setModel(model);
+    	if (UserCircumstances.getInstance().isDataBaseOP_asyn()) {
+    		if(RB_searchStudent.isSelected()) {
+    			for(int row = firstchangerow; row<= lastchangerow; row++) {
+    				String updatekeywords = smodel.getColumnName(changecolumn);
+    				Object updatedata = smodel.getValueAt(row, changecolumn);
+    				int updateid = (int) smodel.getValueAt(row, 0);
+    				ModifyController tmodify = new ModifyController(updatekeywords,updatedata,updateid,3);
+    				if(tmodify.update()) {
+    					toaster.success("update success!");
+    				}else {
+    					toaster.error("update wrong!");
+    				}
+    			}
+    		}
+    	}
+    	
+//    	String [] colTitles2 = {"ID","Name", "Age","ff","gg"};
+//        Object[][] data2= {new Object[]{1, 2, 3}, new Object[]{4, 5, 6},new Object[]{7, 8, 9},new Object[]{7, 8, 9},new Object[]{7, 8, 9}};
+//        DefaultTableModel model = new DefaultTableModel(data2, colTitles2);
+//    	table.removeAll();
+//    	table.setModel(model);
     }
     private void ImportEventHandler() {
         toaster.warn("import");
