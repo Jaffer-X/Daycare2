@@ -12,10 +12,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
-<<<<<<< HEAD
 import csye6200.daycare.controller.TeacherModifyController;
-=======
->>>>>>> 8e8420225b68031b4cee7578d88ab964965203fd
 import csye6200.daycare.controller.TeacherRecordSearchController;
 import csye6200.daycare.controller.TeacherSearchController;
 import csye6200.daycare.lib.*;
@@ -48,14 +45,11 @@ public class TeacherWindow extends JFrame{
 	private mScrollPane mSP;
 	private String [] colTitles = {"ID","Name", "Age"};
 	private Object[][] data= {new Object[]{1, 2, 3}, new Object[]{4, 5, 6},new Object[]{7, 8, 9}};
-<<<<<<< HEAD
 	private DefaultTableModel model;
 	private int firstchangerow;
 	private int lastchangerow;
 	private int changecolumn;
 	private int tablechangetype;
-=======
->>>>>>> 8e8420225b68031b4cee7578d88ab964965203fd
 
 	public void start() {
 		JPanel mainpanel = getMainJPanel();
@@ -143,10 +137,7 @@ public class TeacherWindow extends JFrame{
         mSP.getViewport().setBackground(UIUtils.COLOR_BACKGROUND);
     	mainpanel.add(mSP);
     	mSP.setBounds(0, 420, 1080, 340);
-<<<<<<< HEAD
     	
-=======
->>>>>>> 8e8420225b68031b4cee7578d88ab964965203fd
         
         this.add(mainpanel);
         this.pack();
@@ -318,7 +309,6 @@ public class TeacherWindow extends JFrame{
     						}
     					}
     					toaster.success("search teacher success!");
-<<<<<<< HEAD
     					 model = new DefaultTableModel(((TeacherSearchController) tSearch).getDataString(),((TeacherSearchController) tSearch).getTitle().toArray());
     					table.removeAll();
     					table.setModel(model);
@@ -330,11 +320,6 @@ public class TeacherWindow extends JFrame{
     			    		 tablechangetype = e.getType();
     			    		}
     			    	});
-=======
-    					DefaultTableModel model = new DefaultTableModel(((TeacherSearchController) tSearch).getDataString(),((TeacherSearchController) tSearch).getTitle().toArray());
-    					table.removeAll();
-    					table.setModel(model);
->>>>>>> 8e8420225b68031b4cee7578d88ab964965203fd
     				} catch (InterruptedException e) {
     					e.printStackTrace();
     				}
@@ -386,7 +371,6 @@ public class TeacherWindow extends JFrame{
 		
 	}
 	private void ModifyEventHandler() {
-<<<<<<< HEAD
 		if (UserCircumstances.getInstance().isDataBaseOP_asyn()) {
 			if(RB_searchTeacher.isSelected()) {
 				for(int row = firstchangerow; row<= lastchangerow; row++) {
@@ -456,9 +440,6 @@ public class TeacherWindow extends JFrame{
 			
 		}
        // toaster.warn("modify");
-=======
-        toaster.warn("modify");
->>>>>>> 8e8420225b68031b4cee7578d88ab964965203fd
     }
     private void ImportEventHandler() {
         toaster.warn("import");
