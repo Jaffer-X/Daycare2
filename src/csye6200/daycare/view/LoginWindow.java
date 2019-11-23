@@ -4,12 +4,16 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Objects;
 import javax.swing.*;
+
+import csye6200.daycare.controller.LoginController;
 import csye6200.daycare.lib.*;
 /*
  * author:fc
  */
 public class LoginWindow extends JFrame{
 	private static final LoginWindow instance = new LoginWindow();
+	private TextFieldUsername usernameField;
+	private TextFieldPassword passwordField;
 	private LoginWindow() {start();}
 	public static LoginWindow getInstance() {
 		return instance;
@@ -104,9 +108,10 @@ public class LoginWindow extends JFrame{
     }
 
     private void addUsernameTextField(JPanel panel1) {
-        TextFieldUsername usernameField = new TextFieldUsername();
+        usernameField = new TextFieldUsername();
 
         usernameField.setBounds(423, 109, 250, 44);
+        usernameField.setToolTipText("Admin");
         usernameField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -131,9 +136,10 @@ public class LoginWindow extends JFrame{
     }
 
     private void addPasswordTextField(JPanel panel1) {
-        TextFieldPassword passwordField = new TextFieldPassword();
+        passwordField = new TextFieldPassword();
 
         passwordField.setBounds(423, 168, 250, 44);
+        passwordField.setToolTipText("admin");
         passwordField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -225,8 +231,14 @@ public class LoginWindow extends JFrame{
 
     private void loginEventHandler() {
         //toaster.warn("Login event");
-    	mhide();
-    	MainWindow.getInstance().mshow();
+    	LoginController lc = new LoginController(usernameField.getText(),passwordField.getText());
+    	if(lc.login()) {
+    		mhide();
+    		MainWindow.getInstance().mshow();
+    	}
+    	else {
+    		toaster.error("Login Failed");
+    	}
     }
     
     public void mshow() {
