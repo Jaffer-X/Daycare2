@@ -386,12 +386,16 @@ public class StudentWindow extends JFrame{
 					}
 				}).start();
 			} else if (RB_searchRecord.isSelected()) {
-				if (RB_teachingRecord.isSelected())
-					current2 = SEARCH_RECORD.RECORD_TEACHING;
-				else if (RB_immunizationRecord.isSelected())
-					current2 = SEARCH_RECORD.RECORD_IMMUNIZATION;
 				StudentRecordSearchController sSearch2 = new StudentRecordSearchController(CB_Teacher.getSelectedItem().toString(),
 						TF_Record.getText(), current2);
+				if (RB_teachingRecord.isSelected())
+					current2 = SEARCH_RECORD.RECORD_TEACHING;
+				else if (RB_immunizationRecord.isSelected()) {
+					current2 = SEARCH_RECORD.RECORD_IMMUNIZATION;
+					sSearch2.setContainAll(CKB_record1.isSelected());
+					sSearch2.setContainUpcoming(CKB_record2.isSelected());
+					sSearch2.setContainOverdue(CKB_record3.isSelected());
+				}
 				new Thread(sSearch2).start();
 				new Thread(() -> {
 					try {
@@ -447,12 +451,16 @@ public class StudentWindow extends JFrame{
     				toaster.error("search failed");
     			}
 			} else if (RB_searchRecord.isSelected()) {
-				if (RB_teachingRecord.isSelected())
-					current2 = SEARCH_RECORD.RECORD_TEACHING;
-				else if (RB_immunizationRecord.isSelected())
-					current2 = SEARCH_RECORD.RECORD_IMMUNIZATION;
 				StudentRecordSearchController s2 = new StudentRecordSearchController(CB_Teacher.getSelectedItem().toString(),
 						TF_Record.getText(), current2);
+				if (RB_teachingRecord.isSelected())
+					current2 = SEARCH_RECORD.RECORD_TEACHING;
+				else if (RB_immunizationRecord.isSelected()) {
+					current2 = SEARCH_RECORD.RECORD_IMMUNIZATION;
+					s2.setContainAll(CKB_record1.isSelected());
+					s2.setContainUpcoming(CKB_record2.isSelected());
+					s2.setContainOverdue(CKB_record3.isSelected());
+				}
     			if(s2.query()) {
     				toaster.success("search success");
 			        smodel = new DefaultTableModel(((StudentRecordSearchController) s2).getDataString(),((StudentRecordSearchController) s2).getTitle().toArray());

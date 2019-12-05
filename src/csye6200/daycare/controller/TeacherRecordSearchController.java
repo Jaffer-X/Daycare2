@@ -80,7 +80,9 @@ public class TeacherRecordSearchController extends AbstractSearchController impl
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		String sql = ("select * from `Basic_TeachingRecord` where "+category+"='"+keyword+"';");
+		String sql = ("select Basic_Student.Name,Basic_Teacher.Name,Basic_TeachingRecord.* from `Basic_Student`,`Basic_TeachingRecord`,`Basic_Teacher` "
+				+ "where Basic_Student.StudentId=Basic_TeachingRecord.StudentId and "
+				+ "Basic_Teacher.TeacherID= Basic_TeachingRecord.TeacherID and Basic_TeachingRecord."+category+"='"+keyword+"';");
 		System.out.println(sql);
 		
 		mConn = new MySQLConnection();
@@ -95,7 +97,9 @@ public class TeacherRecordSearchController extends AbstractSearchController impl
 	}
 	
 	public boolean query() {
-		String sql = ("select * from `Basic_TeachingRecord` where "+category+"='"+keyword+"';");
+		String sql = ("select Basic_Student.Name,Basic_Teacher.Name,Basic_TeachingRecord.* from `Basic_Student`,`Basic_TeachingRecord`,`Basic_Teacher` "
+				+ "where Basic_Student.StudentId=Basic_TeachingRecord.StudentId and "
+				+ "Basic_Teacher.TeacherID= Basic_TeachingRecord.TeacherID and Basic_TeachingRecord."+category+"='"+keyword+"';");
 		System.out.println(sql);
 		
 		mConn = new MySQLConnection();

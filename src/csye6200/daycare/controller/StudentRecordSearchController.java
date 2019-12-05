@@ -114,9 +114,34 @@ public class StudentRecordSearchController extends RecordSearchController implem
 					+ "where Basic_Student.StudentId=Basic_TeachingRecord.StudentId and "
 					+ "Basic_Teacher.TeacherID= Basic_TeachingRecord.TeacherID and Basic_Student."+category+"='"+keyword+"';");
 		else if (this.current_search==SEARCH_RECORD.RECORD_IMMUNIZATION)
-			sql = ("select Basic_Student.Name,Basic_Vaccine.name,Basic_ImmunizationRecord.* from `Basic_Student`,`Basic_ImmunizationRecord`,`Basic_Vaccine` "
+			System.out.println(isContainAll());
+			if(isContainAll()) {
+				sql = ("select Basic_Student.Name,Basic_Vaccine.name,Basic_ImmunizationRecord.* from `Basic_Student`,`Basic_ImmunizationRecord`,`Basic_Vaccine` "
 					+ "where Basic_Student.StudentID = Basic_ImmunizationRecord.StudentID and "
 					+ "Basic_Vaccine.VaccineId=Basic_ImmunizationRecord.VaccineID and Basic_Student."+category+"='"+keyword+"';");
+			}else {
+				if(isContainUpcoming() && !isContainOverdue()) {
+					sql = ("select Basic_Student.Name,Basic_Vaccine.name,Basic_ImmunizationRecord.* from `Basic_Student`,`Basic_ImmunizationRecord`,`Basic_Vaccine` "
+							+ "where Basic_Student.StudentID = Basic_ImmunizationRecord.StudentID and "
+							+ "Basic_Vaccine.VaccineId=Basic_ImmunizationRecord.VaccineID and Basic_ImmunizationRecord.Alert='upcoming' "
+							+ "and Basic_Student."+category+"='"+keyword+"';");
+				}else if(!isContainUpcoming() && isContainOverdue()) {
+					sql = ("select Basic_Student.Name,Basic_Vaccine.name,Basic_ImmunizationRecord.* from `Basic_Student`,`Basic_ImmunizationRecord`,`Basic_Vaccine` "
+							+ "where Basic_Student.StudentID = Basic_ImmunizationRecord.StudentID and "
+							+ "Basic_Vaccine.VaccineId=Basic_ImmunizationRecord.VaccineID and Basic_ImmunizationRecord.Alert='overdue' "
+							+ "and Basic_Student."+category+"='"+keyword+"';");
+				}else if(isContainOverdue() && isContainUpcoming()) {
+					sql = ("select Basic_Student.Name,Basic_Vaccine.name,Basic_ImmunizationRecord.* from `Basic_Student`,`Basic_ImmunizationRecord`,`Basic_Vaccine` "
+							+ "where Basic_Student.StudentID = Basic_ImmunizationRecord.StudentID and "
+							+ "Basic_Vaccine.VaccineId=Basic_ImmunizationRecord.VaccineID "
+							+ "and (Basic_ImmunizationRecord.Alert='overdue' or Basic_ImmunizationRecord.Alert='upcoming') "
+							+ "and Basic_Student."+category+"='"+keyword+"';");
+				}else {
+					sql = ("select Basic_Student.Name,Basic_Teacher.Name,Basic_TeachingRecord.* from `Basic_Student`,`Basic_TeachingRecord`,`Basic_Teacher` "
+							+ "where Basic_Student.StudentId=Basic_TeachingRecord.StudentId and "
+							+ "Basic_Teacher.TeacherID= Basic_TeachingRecord.TeacherID and Basic_Student."+category+"='"+keyword+"';");
+				}
+			}
 		System.out.println(sql);
 		
 		mConn = new MySQLConnection();
@@ -136,9 +161,34 @@ public class StudentRecordSearchController extends RecordSearchController implem
 					+ "where Basic_Student.StudentId=Basic_TeachingRecord.StudentId and "
 					+ "Basic_Teacher.TeacherID= Basic_TeachingRecord.TeacherID and Basic_Student."+category+"='"+keyword+"';");
 		else if (this.current_search==SEARCH_RECORD.RECORD_IMMUNIZATION)
-			sql = ("select Basic_Student.Name,Basic_Vaccine.name,Basic_ImmunizationRecord.* from `Basic_Student`,`Basic_ImmunizationRecord`,`Basic_Vaccine` "
+			System.out.println(isContainAll());
+			if(isContainAll()) {
+				sql = ("select Basic_Student.Name,Basic_Vaccine.name,Basic_ImmunizationRecord.* from `Basic_Student`,`Basic_ImmunizationRecord`,`Basic_Vaccine` "
 					+ "where Basic_Student.StudentID = Basic_ImmunizationRecord.StudentID and "
 					+ "Basic_Vaccine.VaccineId=Basic_ImmunizationRecord.VaccineID and Basic_Student."+category+"='"+keyword+"';");
+			}else {
+				if(isContainUpcoming() && !isContainOverdue()) {
+					sql = ("select Basic_Student.Name,Basic_Vaccine.name,Basic_ImmunizationRecord.* from `Basic_Student`,`Basic_ImmunizationRecord`,`Basic_Vaccine` "
+							+ "where Basic_Student.StudentID = Basic_ImmunizationRecord.StudentID and "
+							+ "Basic_Vaccine.VaccineId=Basic_ImmunizationRecord.VaccineID and Basic_ImmunizationRecord.Alert='upcoming' "
+							+ "and Basic_Student."+category+"='"+keyword+"';");
+				}else if(!isContainUpcoming() && isContainOverdue()) {
+					sql = ("select Basic_Student.Name,Basic_Vaccine.name,Basic_ImmunizationRecord.* from `Basic_Student`,`Basic_ImmunizationRecord`,`Basic_Vaccine` "
+							+ "where Basic_Student.StudentID = Basic_ImmunizationRecord.StudentID and "
+							+ "Basic_Vaccine.VaccineId=Basic_ImmunizationRecord.VaccineID and Basic_ImmunizationRecord.Alert='overdue' "
+							+ "and Basic_Student."+category+"='"+keyword+"';");
+				}else if(isContainOverdue() && isContainUpcoming()) {
+					sql = ("select Basic_Student.Name,Basic_Vaccine.name,Basic_ImmunizationRecord.* from `Basic_Student`,`Basic_ImmunizationRecord`,`Basic_Vaccine` "
+							+ "where Basic_Student.StudentID = Basic_ImmunizationRecord.StudentID and "
+							+ "Basic_Vaccine.VaccineId=Basic_ImmunizationRecord.VaccineID "
+							+ "and (Basic_ImmunizationRecord.Alert='overdue' or Basic_ImmunizationRecord.Alert='upcoming') "
+							+ "and Basic_Student."+category+"='"+keyword+"';");
+				}else {
+					sql = ("select Basic_Student.Name,Basic_Teacher.Name,Basic_TeachingRecord.* from `Basic_Student`,`Basic_TeachingRecord`,`Basic_Teacher` "
+							+ "where Basic_Student.StudentId=Basic_TeachingRecord.StudentId and "
+							+ "Basic_Teacher.TeacherID= Basic_TeachingRecord.TeacherID and Basic_Student."+category+"='"+keyword+"';");
+				}
+			}
 		System.out.println(sql);
 		
 		mConn = new MySQLConnection();
