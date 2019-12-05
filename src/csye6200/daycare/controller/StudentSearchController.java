@@ -85,7 +85,13 @@ public class StudentSearchController extends AbstractSearchController implements
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		String sql = ("select * from `Basic_Student` where "+category+"='"+keyword+"';");
+		String sql="";
+		if(this.current_search==SEARCH_STUDENT.STUDENT_BASIC)
+			sql = ("select * from `Basic_Student` where "+category+"='"+keyword+"';");
+		else if (this.current_search==SEARCH_STUDENT.STUDENT_IMMUNIZATION)
+			sql = ("select Basic_Student.Name,Basic_Vaccine.name,Basic_ImmunizationRecord.* from `Basic_Student`,`Basic_ImmunizationRecord`,`Basic_Vaccine` "
+					+ "where Basic_Student.StudentID = Basic_ImmunizationRecord.StudentID and "
+					+ "Basic_Vaccine.VaccineId=Basic_ImmunizationRecord.VaccineID and Basic_Student."+category+"='"+keyword+"';");
 		System.out.println(sql);
 		
 		mConn = new MySQLConnection();
@@ -99,7 +105,13 @@ public class StudentSearchController extends AbstractSearchController implements
 		}
 	}
 	public boolean query() {
-		String sql = ("select * from `Basic_Student` where "+category+"='"+keyword+"';");
+		String sql="";
+		if(this.current_search==SEARCH_STUDENT.STUDENT_BASIC)
+			sql = ("select * from `Basic_Student` where "+category+"='"+keyword+"';");
+		else if (this.current_search==SEARCH_STUDENT.STUDENT_IMMUNIZATION)
+			sql = ("select Basic_Student.Name,Basic_Vaccine.name,Basic_ImmunizationRecord.* from `Basic_Student`,`Basic_ImmunizationRecord`,`Basic_Vaccine` "
+					+ "where Basic_Student.StudentID = Basic_ImmunizationRecord.StudentID and "
+					+ "Basic_Vaccine.VaccineId=Basic_ImmunizationRecord.VaccineID and Basic_Student."+category+"='"+keyword+"';");
 		System.out.println(sql);
 		
 		mConn = new MySQLConnection();

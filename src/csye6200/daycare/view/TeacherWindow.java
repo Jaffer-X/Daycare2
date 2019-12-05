@@ -72,6 +72,7 @@ public class TeacherWindow extends JFrame{
 		tkeyword.setFont(UIUtils.FONT_GENERAL_UI);
 		mainpanel.add(tkeyword);
 		COB_teacher = new mComboBox();
+		COB_teacher.addItem("TeacherId");
 		COB_teacher.addItem("Name");
 		COB_teacher.addItem("Age");
 		COB_teacher.addItem("Wage");

@@ -9,6 +9,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import csye6200.daycare.controller.ModifyController;
+import csye6200.daycare.controller.StudentRecordSearchController;
+import csye6200.daycare.controller.StudentRecordSearchController.SEARCH_RECORD;
 import csye6200.daycare.controller.StudentRegisterController;
 import csye6200.daycare.controller.StudentSearchController;
 import csye6200.daycare.controller.StudentSearchController.SEARCH_STUDENT;
@@ -81,7 +83,8 @@ public class StudentWindow extends JFrame{
         L_keywordS.setFont(UIUtils.FONT_GENERAL_UI);
         L_keywordS.setBounds(50,70,100,40);
         
-        CB_Student=new mComboBox();    
+        CB_Student=new mComboBox();
+        CB_Student.addItem("StudentId");
         CB_Student.addItem("Name");    
         CB_Student.addItem("Age");
         CB_Student.addItem("parentName");
@@ -122,7 +125,8 @@ public class StudentWindow extends JFrame{
         L_keywordR.setFont(UIUtils.FONT_GENERAL_UI);
         L_keywordR.setBounds(50,270,100,40);
         
-        CB_Teacher=new mComboBox();    
+        CB_Teacher=new mComboBox();
+        CB_Teacher.addItem("StudentId"); 
         CB_Teacher.addItem("Name");    
         CB_Teacher.addItem("Age");
         mainJPanel.add(CB_Teacher);
@@ -342,6 +346,7 @@ public class StudentWindow extends JFrame{
     
     private void SearchEventHandler() {
     	StudentSearchController.SEARCH_STUDENT current = null;
+    	StudentRecordSearchController.SEARCH_RECORD current2 = null;
 		if (UserCircumstances.getInstance().isDataBaseOP_asyn()) {
 			if (RB_searchStudent.isSelected()) {
 				if (RB_studentBasic.isSelected())
@@ -381,29 +386,40 @@ public class StudentWindow extends JFrame{
 					}
 				}).start();
 			} else if (RB_searchRecord.isSelected()) {
-//				if (RB_teachingRecord.isSelected())
-//					current = SEARCH.RECORD_TEACHING;
-//				else if (RB_immunizationRecord.isSelected())
-//					current = SEARCH.RECORD_IMMUNIZATION;
-//				Runnable sSearch = new StudentSearchController(CB_Teacher.getSelectedItem().toString(),
-//						TF_Record.getText(), current);
-//				new Thread(sSearch).start();
-//				new Thread(() -> {
-//					try {
-//						int n = 0;
-//						while (!((StudentSearchController) sSearch).isSuccess()) {
-//							Thread.sleep(200);
-//							n++;
-//							if (n > 50) {
-//								toaster.error("search failed");
-//								return;
-//							}
-//						}
-//						toaster.success("search success");
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//				}).start();
+				if (RB_teachingRecord.isSelected())
+					current2 = SEARCH_RECORD.RECORD_TEACHING;
+				else if (RB_immunizationRecord.isSelected())
+					current2 = SEARCH_RECORD.RECORD_IMMUNIZATION;
+				StudentRecordSearchController sSearch2 = new StudentRecordSearchController(CB_Teacher.getSelectedItem().toString(),
+						TF_Record.getText(), current2);
+				new Thread(sSearch2).start();
+				new Thread(() -> {
+					try {
+						int n = 0;
+						while (!((StudentRecordSearchController) sSearch2).isSuccess()) {
+							Thread.sleep(200);
+							n++;
+							if (n > 50) {
+								toaster.error("search failed");
+								return;
+							}
+						}
+						toaster.success("search success");
+				        smodel = new DefaultTableModel(((StudentRecordSearchController) sSearch2).getDataString(),((StudentRecordSearchController) sSearch2).getTitle().toArray());
+				    	table.removeAll();
+				    	table.setModel(smodel);
+				    	smodel.addTableModelListener(new TableModelListener() {
+    			    		public void tableChanged(TableModelEvent e) {
+    			    		 firstchangerow = e.getFirstRow();
+    			    		 lastchangerow = e.getLastRow();
+    			    		 changecolumn = e.getColumn();
+    			    		 tablechangetype = e.getType();
+    			    		}
+    			    	});
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}).start();
 			}
 		}
     	else{//sync method
@@ -416,21 +432,43 @@ public class StudentWindow extends JFrame{
 						TF_Student.getText(), current);
     			if(s.query()) {
     				toaster.success("search success");
+			        smodel = new DefaultTableModel(((StudentSearchController) s).getDataString(),((StudentSearchController) s).getTitle().toArray());
+			    	table.removeAll();
+			    	table.setModel(smodel);
+			    	smodel.addTableModelListener(new TableModelListener() {
+			    		public void tableChanged(TableModelEvent e) {
+			    		 firstchangerow = e.getFirstRow();
+			    		 lastchangerow = e.getLastRow();
+			    		 changecolumn = e.getColumn();
+			    		 tablechangetype = e.getType();
+			    		}
+			    	});
     			}else{
     				toaster.error("search failed");
     			}
 			} else if (RB_searchRecord.isSelected()) {
-//				if (RB_teachingRecord.isSelected())
-//					current = SEARCH.RECORD_TEACHING;
-//				else if (RB_immunizationRecord.isSelected())
-//					current = SEARCH.RECORD_IMMUNIZATION;
-//				StudentSearchController s = new StudentSearchController(CB_Teacher.getSelectedItem().toString(),
-//						TF_Record.getText(), current);
-//    			if(s.query()) {
-//    				toaster.success("search success");
-//    			}else{
-//    				toaster.error("search failed");
-//    			}
+				if (RB_teachingRecord.isSelected())
+					current2 = SEARCH_RECORD.RECORD_TEACHING;
+				else if (RB_immunizationRecord.isSelected())
+					current2 = SEARCH_RECORD.RECORD_IMMUNIZATION;
+				StudentRecordSearchController s2 = new StudentRecordSearchController(CB_Teacher.getSelectedItem().toString(),
+						TF_Record.getText(), current2);
+    			if(s2.query()) {
+    				toaster.success("search success");
+			        smodel = new DefaultTableModel(((StudentRecordSearchController) s2).getDataString(),((StudentRecordSearchController) s2).getTitle().toArray());
+			    	table.removeAll();
+			    	table.setModel(smodel);
+			    	smodel.addTableModelListener(new TableModelListener() {
+			    		public void tableChanged(TableModelEvent e) {
+			    		 firstchangerow = e.getFirstRow();
+			    		 lastchangerow = e.getLastRow();
+			    		 changecolumn = e.getColumn();
+			    		 tablechangetype = e.getType();
+			    		}
+			    	});
+    			}else{
+    				toaster.error("search failed");
+    			}
 			}			
     	}
 		refreshUITable();
@@ -452,12 +490,6 @@ public class StudentWindow extends JFrame{
     			}
     		}
     	}
-    	
-//    	String [] colTitles2 = {"ID","Name", "Age","ff","gg"};
-//        Object[][] data2= {new Object[]{1, 2, 3}, new Object[]{4, 5, 6},new Object[]{7, 8, 9},new Object[]{7, 8, 9},new Object[]{7, 8, 9}};
-//        DefaultTableModel model = new DefaultTableModel(data2, colTitles2);
-//    	table.removeAll();
-//    	table.setModel(model);
     }
     private void ImportEventHandler() {
         toaster.warn("import");

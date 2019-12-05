@@ -232,11 +232,16 @@ public class LoginWindow extends JFrame{
     private void loginEventHandler() {
         //toaster.warn("Login event");
     	LoginController lc = new LoginController(usernameField.getText(),passwordField.getText());
-    	if(lc.login()) {
-    		mhide();
-    		MainWindow.getInstance().mshow();
+    	try {    	
+    		if(lc.login()) {
+    			mhide();
+    			MainWindow.getInstance().mshow();
+    		}
+    		else {
+    			toaster.error("Login Failed");
+    		}
     	}
-    	else {
+    	catch(Exception e) {
     		toaster.error("Login Failed");
     	}
     }
