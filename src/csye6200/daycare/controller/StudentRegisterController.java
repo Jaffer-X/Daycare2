@@ -1,54 +1,69 @@
 package csye6200.daycare.controller;
 
+import csye6200.daycare.lib.mHttpClient;
 import csye6200.daycare.lib.MySQLConnection;
+import csye6200.daycare.main.UserCircumstances;
 import csye6200.daycare.model.Student;
 
 public class StudentRegisterController extends AbstractRegisterController implements Runnable{
 	private Student mStudent;
-	private MySQLConnection mConn;
 	private boolean success = false;
 	public StudentRegisterController(String name, int age,String parentName, String parentPhone, String gender, String Address, int read,int sport, int math){
 		mStudent= new Student(name,age,parentName,parentPhone,gender,Address,read,sport,math);
 	}
 	//sync
 	public boolean register() {
-		String sql = ("insert into `Basic_Student` Set Name='"+mStudent.getName()+"',"+"Age='"+mStudent.getAge()+"',"
-				+"parentName='"+mStudent.getParentName()+"',parentPhone='"+mStudent.getParentPhone()+"',Address='"+mStudent.getAddress()+"',Gender='"+mStudent.getGender()
-				+"',ReadTest='"+mStudent.getReadTest()+"',SportTest='"+mStudent.getSportTest()+"',MathTest='"+mStudent.getMathTest()+"';");
-		System.out.println(sql);
+		String mjson = ("{\"name\":\""+mStudent.getName()+"\","
+			      + "\"age\":"+mStudent.getAge()+","
+			      + "\"parentName\":\""+mStudent.getParentName()+"\","
+			      + "\"address\":\""+mStudent.getAddress()+"\","
+			      + "\"parentPhone\":\""+mStudent.getParentPhone()+"\","
+			      + "\"gender\":\""+mStudent.getGender()+"\"," 
+			      + "\"read\":"+mStudent.getReadTest()+","
+			      + "\"sport\":"+mStudent.getSportTest()+","
+			      + "\"math\":"+mStudent.getMathTest()+","
+			      + "\"algorithm\":\""+UserCircumstances.getInstance().getCurrent_strategy().ordinal()+"\"}");
+		System.out.println(mjson);
 		
-		mConn = new MySQLConnection();
-		if(mConn.getConnection()==null) {
-			return false;
+		String res;
+		mHttpClient hc = new mHttpClient();
+		res=hc.sendPost("http://119.3.209.144:6200", mjson);
+		System.out.println(res);
+		if(!res.contains("-1")) {
+			this.success=true;
+			return true;
 		}
-		return mConn.sendSQLInsert(sql);	
+		return false;
 	}
 	//async
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		String sql = ("insert into `Basic_Student` Set Name='"+mStudent.getName()+"',"+"Age='"+mStudent.getAge()+"',"
-				+"parentName='"+mStudent.getParentName()+"',parentPhone='"+mStudent.getParentPhone()+"',Address='"+mStudent.getAddress()+"',Gender='"+mStudent.getGender()
-				+"',ReadTest='"+mStudent.getReadTest()+"',SportTest='"+mStudent.getSportTest()+"',MathTest='"+mStudent.getMathTest()+"';");
-		System.out.println(sql);
-		
-		mConn = new MySQLConnection();
-		if(mConn.getConnection()==null) {
-			this.success=false;
-		}
-		this.success = mConn.sendSQLInsert(sql);	
+		String mjson = ("{\"name\":\""+mStudent.getName()+"\","
+			      + "\"age\":"+mStudent.getAge()+","
+			      + "\"parentName\":\""+mStudent.getParentName()+"\","
+			      + "\"address\":\""+mStudent.getAddress()+"\","
+			      + "\"parentPhone\":\""+mStudent.getParentPhone()+"\","
+			      + "\"gender\":\""+mStudent.getGender()+"\"," 
+			      + "\"read\":"+mStudent.getReadTest()+","
+			      + "\"sport\":"+mStudent.getSportTest()+","
+			      + "\"math\":"+mStudent.getMathTest()+","
+			      + "\"algorithm\":\""+UserCircumstances.getInstance().getCurrent_strategy().ordinal()+"\"}");
+		System.out.println(mjson);
+	
+		String res;
+		mHttpClient hc = new mHttpClient();
+		res=hc.sendPost("http://119.3.209.144:6200", mjson);
+		System.out.println(res);
+		if(!res.contains("-1")) {
+			this.success=true;
+		}	
 	}
 	public Student getmStudent() {
 		return mStudent;
 	}
 	public void setmStudent(Student mStudent) {
 		this.mStudent = mStudent;
-	}
-	public MySQLConnection getmConn() {
-		return mConn;
-	}
-	public void setmConn(MySQLConnection mConn) {
-		this.mConn = mConn;
 	}
 	public boolean isSuccess() {
 		return success;
