@@ -12,6 +12,9 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
+import csye6200.daycare.controller.ExportAll;
+import csye6200.daycare.controller.ExportController;
+import csye6200.daycare.controller.ImportController;
 import csye6200.daycare.controller.ModifyController;
 import csye6200.daycare.controller.TeacherRecordSearchController;
 import csye6200.daycare.controller.TeacherSearchController;
@@ -76,6 +79,7 @@ public class TeacherWindow extends JFrame{
 		COB_teacher.addItem("Name");
 		COB_teacher.addItem("Age");
 		COB_teacher.addItem("Wage");
+		COB_teacher.addItem("ALL");
 		COB_teacher.setBounds(150,70,200,40);
 		mainpanel.add(COB_teacher);
 		TF_teacher = new mTextField();
@@ -468,10 +472,58 @@ public class TeacherWindow extends JFrame{
 		// toaster.warn("modify");
 	}
 	private void ImportEventHandler() {
-		toaster.warn("import");
+		if(RB_searchTeacher.isSelected()) {
+			if(COB_teacher.getSelectedItem().toString() == "ALL") {
+				ImportController load = new ImportController("Basic_Teacher", "D:/AllTeachers.csv");
+				if(load.importcvs()) {
+					toaster.success("All teachers import success!");
+				}else {
+					toaster.error("All teachers import error!!");
+				}
+			}else {
+			ImportController load = new ImportController("Basic_Teacher", "D:/Teachers.csv");
+			if(load.importcvs()) {
+				toaster.success("teachers import success!");
+			}else {
+				toaster.error("teachers import error!!");
+			}
+			}
+		}
+		
 	}
 	private void ExportEventHandler() {
-		toaster.warn("export");
+//		ExportAll exporta = new ExportAll("D:/Allteacherexport.csv", "Basic_Teacher");
+//		if(exporta.export()) {
+//			toaster.success("export success!");
+//		};
+		if(RB_searchTeacher.isSelected() && COB_teacher.getSelectedItem().toString() == "ALL") {
+		TeacherSearchController allsearch = new TeacherSearchController(COB_teacher.getSelectedItem().toString(),TF_teacher.getText());
+		if(allsearch.queryall()) {
+			toaster.success("search teacher success!");
+		}else {
+			toaster.error("search teacher failed!");
+		}
+		
+		model = new DefaultTableModel(((TeacherSearchController) allsearch).getDataString(),((TeacherSearchController) allsearch).getTitle().toArray());
+		table.removeAll();
+		table.setModel(model);
+		
+		
+		ExportController export = new ExportController(table, "D:/Allteachers.csv");
+		if(export.exportToCSV()) {
+			toaster.success("export success!");
+		}else {
+			toaster.error("exprot error!!");
+		}
+		}else {ExportController export = new ExportController(table, "D:/Teachers.csv");
+		if(export.exportToCSV()) {
+			toaster.success("export success!");
+		}else {
+			toaster.error("exprot error!!");
+		}
+			
+		}
+		
 	}
 	private void BackEventHandler() {
 		mhide();

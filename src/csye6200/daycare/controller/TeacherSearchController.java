@@ -144,5 +144,22 @@ public class TeacherSearchController extends AbstractSearchController implements
 			return true;
 		}
 	}
+	
+	public boolean queryall() {
+		String sql = ("select * from `Basic_Teacher` ;");
+		System.out.println(sql);
+		
+		mConn = new MySQLConnection();
+		if(mConn.getConnection()==null) {
+			return false;
+		}
+		content = mConn.sendSQLQuery(sql);
+		if(content.isEmpty()) {
+			return false;
+		}else {
+			title=mConn.getTitle();
+			return true;
+		}
+	}
 
 }

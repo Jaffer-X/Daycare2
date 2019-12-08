@@ -8,11 +8,14 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
+import csye6200.daycare.controller.ExportController;
+import csye6200.daycare.controller.ImportController;
 import csye6200.daycare.controller.ModifyController;
 import csye6200.daycare.controller.StudentRecordSearchController;
 import csye6200.daycare.controller.StudentRecordSearchController.SEARCH_RECORD;
 import csye6200.daycare.controller.StudentRegisterController;
 import csye6200.daycare.controller.StudentSearchController;
+import csye6200.daycare.controller.TeacherSearchController;
 import csye6200.daycare.controller.StudentSearchController.SEARCH_STUDENT;
 import csye6200.daycare.lib.*;
 import csye6200.daycare.main.UserCircumstances;
@@ -90,6 +93,7 @@ public class StudentWindow extends JFrame{
         CB_Student.addItem("parentName");
         CB_Student.addItem("parentPhone");
         CB_Student.addItem("Address");
+        CB_Student.addItem("ALL");
         mainJPanel.add(CB_Student);
         CB_Student.setBounds(150,70,200,40);
         
@@ -500,10 +504,58 @@ public class StudentWindow extends JFrame{
     	}
     }
     private void ImportEventHandler() {
-        toaster.warn("import");
+        
+        if(RB_searchStudent.isSelected()) {
+        	if(CB_Student.getSelectedItem().toString() == "ALL") {
+        		ImportController load = new ImportController("Basic_Student", "D:/AllStudents.csv");
+    			if(load.importcvs()) {
+    				toaster.success("All students import success!");
+    			}else {
+    				toaster.error("All students import error!!");
+    			}
+        	}else {
+        	ImportController load = new ImportController("Basic_Student", "D:/Students.csv");
+			if(load.importcvs()) {
+				toaster.success("students import success!");
+			}else {
+				toaster.error("students import error!!");
+			}
+        	}
+        }
     }
     private void ExportEventHandler() {
         toaster.warn("export");
+        StudentSearchController.SEARCH_STUDENT current = null;
+        if(RB_searchStudent.isSelected() && CB_Student.getSelectedItem().toString() == "ALL") {
+        	current = SEARCH_STUDENT.STUDENT_BASIC;
+    		StudentSearchController allsearch = new StudentSearchController(CB_Student.getSelectedItem().toString(),
+					TF_Student.getText(), current);
+    		if(allsearch.queryall()) {
+    			toaster.success("search teacher success!");
+    		}else {
+    			toaster.error("search teacher failed!");
+    		}
+    		
+    		smodel = new DefaultTableModel(((StudentSearchController) allsearch).getDataString(),((StudentSearchController) allsearch).getTitle().toArray());
+    		table.removeAll();
+    		table.setModel(smodel);
+    		
+    		
+    		ExportController export = new ExportController(table, "D:/AllStudents.csv");
+    		if(export.exportToCSV()) {
+    			toaster.success("export success!");
+    		}else {
+    			toaster.error("exprot error!!");
+    		}
+    		}else {
+    		ExportController export = new ExportController(table, "D:/Students.csv");
+    		if(export.exportToCSV()) {
+    			toaster.success("export success!");
+    		}else {
+    			toaster.error("exprot error!!");
+    		}
+    			
+    		}
     }
     private void BackEventHandler() {
         mhide();
