@@ -359,6 +359,9 @@ public class StudentWindow extends JFrame{
 					current = SEARCH_STUDENT.STUDENT_IMMUNIZATION;
 				Runnable sSearch = new StudentSearchController(CB_Student.getSelectedItem().toString(),
 						TF_Student.getText(), current);
+				((StudentSearchController) sSearch).setContainTeacher(CKB_student1.isSelected());
+				((StudentSearchController) sSearch).setContainGroup(CKB_student2.isSelected());
+				((StudentSearchController) sSearch).setContainClassroom(CKB_student3.isSelected());
 				new Thread(sSearch).start();
 				new Thread(() -> {
 					try {
@@ -438,6 +441,9 @@ public class StudentWindow extends JFrame{
 					current = SEARCH_STUDENT.STUDENT_IMMUNIZATION;
 				StudentSearchController s = new StudentSearchController(CB_Student.getSelectedItem().toString(),
 						TF_Student.getText(), current);
+				s.setContainTeacher(CKB_student1.isSelected());
+				s.setContainGroup(CKB_student2.isSelected());
+				s.setContainClassroom(CKB_student3.isSelected());
     			if(s.query()) {
     				toaster.success("search success");
 			        smodel = new DefaultTableModel(((StudentSearchController) s).getDataString(),((StudentSearchController) s).getTitle().toArray());

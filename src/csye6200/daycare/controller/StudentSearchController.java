@@ -86,8 +86,12 @@ public class StudentSearchController extends AbstractSearchController implements
 	public void run() {
 		// TODO Auto-generated method stub
 		String sql="";
-		if(this.current_search==SEARCH_STUDENT.STUDENT_BASIC)
+		if(this.current_search==SEARCH_STUDENT.STUDENT_BASIC) {
 			sql = ("select * from `Basic_Student` where "+category+"='"+keyword+"';");
+			if(this.containTeacher||this.containGroup||this.containClassroom) {
+				sql = ("select s.name,s.age,s.grade,s.readTest,s.sportTest,s.MathTest,r.teacherId,r.GroupId,r.ClassroomId from `Basic_Student` s, `Basic_TeachingRecord` r where s.studentId=r.studentId and s."+category+"='"+keyword+"';");
+			}
+		}
 		else if (this.current_search==SEARCH_STUDENT.STUDENT_IMMUNIZATION)
 			sql = ("select Basic_Student.Name,Basic_Vaccine.name,Basic_ImmunizationRecord.* from `Basic_Student`,`Basic_ImmunizationRecord`,`Basic_Vaccine` "
 					+ "where Basic_Student.StudentID = Basic_ImmunizationRecord.StudentID and "
@@ -106,8 +110,12 @@ public class StudentSearchController extends AbstractSearchController implements
 	}
 	public boolean query() {
 		String sql="";
-		if(this.current_search==SEARCH_STUDENT.STUDENT_BASIC)
+		if(this.current_search==SEARCH_STUDENT.STUDENT_BASIC) {
 			sql = ("select * from `Basic_Student` where "+category+"='"+keyword+"';");
+			if(this.containTeacher||this.containGroup||this.containClassroom) {
+				sql = ("select s.name,s.age,s.grade,s.readTest,s.sportTest,s.MathTest,r.teacherId,r.GroupId,r.ClassroomId from `Basic_Student` s, `Basic_TeachingRecord` r where s.studentId=r.studentId and s."+category+"='"+keyword+"';");
+			}
+		}
 		else if (this.current_search==SEARCH_STUDENT.STUDENT_IMMUNIZATION)
 			sql = ("select Basic_Student.Name,Basic_Vaccine.name,Basic_ImmunizationRecord.* from `Basic_Student`,`Basic_ImmunizationRecord`,`Basic_Vaccine` "
 					+ "where Basic_Student.StudentID = Basic_ImmunizationRecord.StudentID and "
@@ -127,6 +135,24 @@ public class StudentSearchController extends AbstractSearchController implements
 		}
 	}
 	
+	public boolean isContainTeacher() {
+		return containTeacher;
+	}
+	public void setContainTeacher(boolean containTeacher) {
+		this.containTeacher = containTeacher;
+	}
+	public boolean isContainClassroom() {
+		return containClassroom;
+	}
+	public void setContainClassroom(boolean containClassroom) {
+		this.containClassroom = containClassroom;
+	}
+	public boolean isContainGroup() {
+		return containGroup;
+	}
+	public void setContainGroup(boolean containGroup) {
+		this.containGroup = containGroup;
+	}
 	public boolean queryall() {
 		String sql = ("select * from `Basic_Student` ;");
 		System.out.println(sql);
