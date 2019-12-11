@@ -78,7 +78,6 @@ public class TeacherWindow extends JFrame{
 		COB_teacher.addItem("Name");
 		COB_teacher.addItem("Age");
 		COB_teacher.addItem("Wage");
-		COB_teacher.addItem("ALL");
 		COB_teacher.setBounds(150,70,200,40);
 		mainpanel.add(COB_teacher);
 		TF_teacher = new mTextField();
@@ -302,6 +301,9 @@ public class TeacherWindow extends JFrame{
 		if (UserCircumstances.getInstance().isDataBaseOP_asyn()) {
 			if (RB_searchTeacher.isSelected()) {
 				Runnable tSearch = new TeacherSearchController(COB_teacher.getSelectedItem().toString(),TF_teacher.getText());
+				((TeacherSearchController) tSearch).setContainClassroom(CB_classroom.isSelected());
+				((TeacherSearchController) tSearch).setContainGroup(CB_group.isSelected());
+				((TeacherSearchController) tSearch).setContainFeature(CB_feature.isSelected());;
 				new Thread(tSearch).start();
 				new Thread(() -> {
 					try {
@@ -364,6 +366,9 @@ public class TeacherWindow extends JFrame{
 		}else {
 			if(RB_searchTeacher.isSelected()) {
 				TeacherSearchController tsearch = new TeacherSearchController(COB_teacher.getSelectedItem().toString(),TF_teacher.getText());
+				((TeacherSearchController) tsearch).setContainClassroom(CB_classroom.isSelected());
+				((TeacherSearchController) tsearch).setContainGroup(CB_group.isSelected());
+				((TeacherSearchController) tsearch).setContainFeature(CB_feature.isSelected());;
 				if(tsearch.query()) {
 					toaster.success("search teacher success!");
 				}else {
@@ -471,50 +476,60 @@ public class TeacherWindow extends JFrame{
 		// toaster.warn("modify");
 	}
 	private void ImportEventHandler() {
+		JFileChooser jfc = new JFileChooser();
+		jfc.showDialog(new JLabel(), "choose");
+		String filepath = jfc.getSelectedFile().getAbsolutePath(); 
+		System.out.println(filepath);
 		if(RB_searchTeacher.isSelected()) {
-			if(COB_teacher.getSelectedItem().toString() == "ALL") {
-				ImportController load = new ImportController("Basic_Teacher", "D:/AllTeachers.csv");
-				if(load.importcvs()) {
-					toaster.success("All teachers import success!");
-				}else {
-					toaster.error("All teachers import error!!");
-				}
-			}else {
-			ImportController load = new ImportController("Basic_Teacher", "D:/Teachers.csv");
+			ImportController load = new ImportController("Basic_Teacher", filepath);
+
 			if(load.importcvs()) {
-				toaster.success("teachers import success!");
+				model = new DefaultTableModel(load.getData(),load.getTitle().toArray());
+				table.removeAll();
+				table.setModel(model);
+				toaster.success("All teachers import success!");
 			}else {
-				toaster.error("teachers import error!!");
-			}
+				toaster.error("All teachers import error!!");
 			}
 		}
-		
+		else {
+			toaster.error("teachers import error!!");
+		}
+
+
+
 	}
 	private void ExportEventHandler() {
 //		ExportAll exporta = new ExportAll("D:/Allteacherexport.csv", "Basic_Teacher");
 //		if(exporta.export()) {
 //			toaster.success("export success!");
 //		};
-		if(RB_searchTeacher.isSelected() && COB_teacher.getSelectedItem().toString() == "ALL") {
-		TeacherSearchController allsearch = new TeacherSearchController(COB_teacher.getSelectedItem().toString(),TF_teacher.getText());
-		if(allsearch.queryall()) {
-			toaster.success("search teacher success!");
-		}else {
-			toaster.error("search teacher failed!");
-		}
-		
-		model = new DefaultTableModel(((TeacherSearchController) allsearch).getDataString(),((TeacherSearchController) allsearch).getTitle().toArray());
-		table.removeAll();
-		table.setModel(model);
-		
-		
-		ExportController export = new ExportController(table, "D:/Allteachers.csv");
-		if(export.exportToCSV()) {
-			toaster.success("export success!");
-		}else {
-			toaster.error("exprot error!!");
-		}
-		}else {ExportController export = new ExportController(table, "D:/Teachers.csv");
+		JFileChooser jfc = new JFileChooser();
+		jfc.showDialog(new JLabel(), "choose");
+		String exportfilepath = jfc.getSelectedFile().getAbsolutePath(); 
+		System.out.println(exportfilepath);
+		if(RB_searchTeacher.isSelected()) {
+//		TeacherSearchController allsearch = new TeacherSearchController(COB_teacher.getSelectedItem().toString(),TF_teacher.getText());
+//		if(allsearch.queryall()) {
+//			toaster.success("search teacher success!");
+//		}else {
+//			toaster.error("search teacher failed!");
+//		}
+//		
+//		model = new DefaultTableModel(((TeacherSearchController) allsearch).getDataString(),((TeacherSearchController) allsearch).getTitle().toArray());
+//		table.removeAll();
+//		table.setModel(model);
+//		
+//		
+//		ExportController export = new ExportController(table, "D:/Allteachers.csv");
+//		if(export.exportToCSV()) {
+//			toaster.success("export success!");
+//		}else {
+//			toaster.error("exprot error!!");
+//		}
+//		}else {
+			
+			ExportController export = new ExportController(table, exportfilepath);
 		if(export.exportToCSV()) {
 			toaster.success("export success!");
 		}else {

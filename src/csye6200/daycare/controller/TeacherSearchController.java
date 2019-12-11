@@ -17,13 +17,47 @@ public class TeacherSearchController extends AbstractSearchController implements
 	private String keyword;
 	private String category;
 
+	private boolean containFeature = false;
+	private boolean containClassroom = false;
+	private boolean containGroup=false;
 //	private boolean containClassroom = false;
 //	private boolean containGroup=false;
 //	private boolean containFeature = false;
 	
 	
+	
 	public Teacher getmTeacher() {
 		return mTeacher;
+	}
+
+
+	public boolean isContainFeature() {
+		return containFeature;
+	}
+
+
+	public void setContainFeature(boolean containFeature) {
+		this.containFeature = containFeature;
+	}
+
+
+	public boolean isContainClassroom() {
+		return containClassroom;
+	}
+
+
+	public void setContainClassroom(boolean containClassroom) {
+		this.containClassroom = containClassroom;
+	}
+
+
+	public boolean isContainGroup() {
+		return containGroup;
+	}
+
+
+	public void setContainGroup(boolean containGroup) {
+		this.containGroup = containGroup;
 	}
 
 
@@ -114,7 +148,34 @@ public class TeacherSearchController extends AbstractSearchController implements
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		String sql = ("select * from `Basic_Teacher` where "+category+"='"+keyword+"';");
+		String sql = null;
+		if(keyword.equals("all") || keyword.equals("ALL")) {
+			 sql = ("select * from `Basic_Teacher`;");
+		}else {
+			if(!this.containFeature&&!this.containGroup&&!this.containClassroom) {
+		 sql = ("select * from `Basic_Teacher` where "+category+"='"+keyword+"';");
+			}else if(this.containFeature&&this.containGroup&&this.containClassroom) {
+			 sql =("select t.Name,t.Age,t.Wage,t.GenderFeature,t.ReadingFeature,t.SportFeature,t.MathFeature,r.GroupId,r.ClassroomId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+			 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
+		 }else if(this.containClassroom && !this.containGroup && !this.containFeature) {
+			 sql =("select t.Name,t.Age,t.Wage,r.ClassroomId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+				 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
+		 }else if(this.containClassroom && this.containGroup && !this.containFeature) {
+			 sql =("select t.Name,t.Age,t.Wage,r.ClassroomId,r.GroupId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+				 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
+		 }else if(this.containClassroom && !this.containGroup && this.containFeature) {
+			 sql =("select t.Name,t.Age,t.Wage,t.GenderFeature,t.ReadingFeature,t.SportFeature,t.MathFeature,r.GroupId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+				 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
+		 }else if(!this.containClassroom && this.containGroup && !this.containFeature) {
+			 sql =("select t.Name,t.Age,t.Wage,r.GroupId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+				 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
+		 }else if(!this.containClassroom && this.containGroup && this.containFeature) {
+			 sql =("select t.Name,t.Age,t.Wage,t.GenderFeature,t.ReadingFeature,t.SportFeature,t.MathFeature,r.GroupId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+				 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
+		 }else if(!this.containClassroom && !this.containGroup && this.containFeature) {
+			 sql = ("select * from `Basic_Teacher` where "+category+"='"+keyword+"';");
+		 }
+		}
 		System.out.println(sql);
 		
 		mConn = new MySQLConnection();
@@ -129,7 +190,34 @@ public class TeacherSearchController extends AbstractSearchController implements
 	}
 	
 	public boolean query() {
-		String sql = ("select * from `Basic_Teacher` where "+category+"='"+keyword+"';");
+		String sql = null;
+		if(keyword == "all" || keyword == "ALL") {
+			 sql = ("select * from `Basic_Teacher`;");
+		}else {
+			if(!this.containFeature&&!this.containGroup&&!this.containClassroom) {
+				 sql = ("select * from `Basic_Teacher` where "+category+"='"+keyword+"';");
+					}else if(this.containFeature&&this.containGroup&&this.containClassroom) {
+					 sql =("select t.Name,t.Age,t.Wage,t.GenderFeature,t.ReadingFeature,t.SportFeature,t.MathFeature,r.GroupId,r.ClassroomId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+					 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
+				 }else if(this.containClassroom && !this.containGroup && !this.containFeature) {
+					 sql =("select t.Name,t.Age,t.Wage,r.ClassroomId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+						 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
+				 }else if(this.containClassroom && this.containGroup && !this.containFeature) {
+					 sql =("select t.Name,t.Age,t.Wage,r.ClassroomId,r.GroupId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+						 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
+				 }else if(this.containClassroom && !this.containGroup && this.containFeature) {
+					 sql =("select t.Name,t.Age,t.Wage,t.GenderFeature,t.ReadingFeature,t.SportFeature,t.MathFeature,r.GroupId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+						 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
+				 }else if(!this.containClassroom && this.containGroup && !this.containFeature) {
+					 sql =("select t.Name,t.Age,t.Wage,r.GroupId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+						 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
+				 }else if(!this.containClassroom && this.containGroup && this.containFeature) {
+					 sql =("select t.Name,t.Age,t.Wage,t.GenderFeature,t.ReadingFeature,t.SportFeature,t.MathFeature,r.GroupId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+						 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
+				 }else if(!this.containClassroom && !this.containGroup && this.containFeature) {
+					 sql = ("select * from `Basic_Teacher` where "+category+"='"+keyword+"';");
+				 }
+		}
 		System.out.println(sql);
 		
 		mConn = new MySQLConnection();
@@ -145,21 +233,6 @@ public class TeacherSearchController extends AbstractSearchController implements
 		}
 	}
 	
-	public boolean queryall() {
-		String sql = ("select * from `Basic_Teacher` ;");
-		System.out.println(sql);
-		
-		mConn = new MySQLConnection();
-		if(mConn.getConnection()==null) {
-			return false;
-		}
-		content = mConn.sendSQLQuery(sql);
-		if(content.isEmpty()) {
-			return false;
-		}else {
-			title=mConn.getTitle();
-			return true;
-		}
-	}
+	
 
 }

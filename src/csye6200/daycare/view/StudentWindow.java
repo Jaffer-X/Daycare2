@@ -93,7 +93,7 @@ public class StudentWindow extends JFrame{
         CB_Student.addItem("parentName");
         CB_Student.addItem("parentPhone");
         CB_Student.addItem("Address");
-        CB_Student.addItem("ALL");
+
         mainJPanel.add(CB_Student);
         CB_Student.setBounds(150,70,200,40);
         
@@ -360,8 +360,8 @@ public class StudentWindow extends JFrame{
 				Runnable sSearch = new StudentSearchController(CB_Student.getSelectedItem().toString(),
 						TF_Student.getText(), current);
 				((StudentSearchController) sSearch).setContainTeacher(CKB_student1.isSelected());
-				((StudentSearchController) sSearch).setContainGroup(CKB_student2.isSelected());
-				((StudentSearchController) sSearch).setContainClassroom(CKB_student3.isSelected());
+				((StudentSearchController) sSearch).setContainClassroom(CKB_student2.isSelected());
+				((StudentSearchController) sSearch).setContainGroup(CKB_student3.isSelected());
 				new Thread(sSearch).start();
 				new Thread(() -> {
 					try {
@@ -495,6 +495,7 @@ public class StudentWindow extends JFrame{
     private void ModifyEventHandler() {
     	if (UserCircumstances.getInstance().isDataBaseOP_asyn()) {
     		if(RB_searchStudent.isSelected()) {
+    			if(RB_studentBasic.isSelected()) {
     			for(int row = firstchangerow; row<= lastchangerow; row++) {
     				String updatekeywords = smodel.getColumnName(changecolumn);
     				Object updatedata = smodel.getValueAt(row, changecolumn);
@@ -506,55 +507,76 @@ public class StudentWindow extends JFrame{
     					toaster.error("update wrong!");
     				}
     			}
+    			}else {
+    				for(int row = firstchangerow; row<= lastchangerow; row++) {
+        				String updatekeywords = smodel.getColumnName(changecolumn);
+        				Object updatedata = smodel.getValueAt(row, changecolumn);
+        				int updateid = (int) smodel.getValueAt(row, 2);
+        				ModifyController tmodify = new ModifyController(updatekeywords,updatedata,updateid,4);
+        				if(tmodify.update()) {
+        					toaster.success("update success!");
+        				}else {
+        					toaster.error("this type cannot be modify there!");
+        				}
+        			}
+    			}
     		}
     	}
     }
     private void ImportEventHandler() {
-        
+    	JFileChooser jfc = new JFileChooser();
+		jfc.showDialog(new JLabel(), "choose");
+		String filepath = jfc.getSelectedFile().getAbsolutePath(); 
+		System.out.println(filepath);
         if(RB_searchStudent.isSelected()) {
-        	if(CB_Student.getSelectedItem().toString() == "ALL") {
-        		ImportController load = new ImportController("Basic_Student", "D:/AllStudents.csv");
-    			if(load.importcvs()) {
-    				toaster.success("All students import success!");
-    			}else {
-    				toaster.error("All students import error!!");
-    			}
-        	}else {
-        	ImportController load = new ImportController("Basic_Student", "D:/Students.csv");
+        	if (RB_studentBasic.isSelected()) {   		
+        	ImportController load = new ImportController("Basic_Student", filepath);
 			if(load.importcvs()) {
+				smodel = new DefaultTableModel(load.getData(),load.getTitle().toArray());
+				table.removeAll();
+				table.setModel(smodel);
 				toaster.success("students import success!");
 			}else {
 				toaster.error("students import error!!");
 			}
+        	}else {
+        		ImportController load = new ImportController("Basic_im", filepath);
+        		if(load.importcvs()) {
+    				smodel = new DefaultTableModel(load.getData(),load.getTitle().toArray());
+    				table.removeAll();
+    				table.setModel(smodel);
+    				toaster.success("students import success!");
+    			}else {
+    				toaster.error("students import error!!");
+    			}
         	}
+        }if(RB_searchRecord.isSelected()) {
+        	ImportController load = new ImportController("Basic_im", filepath);
+        	if(load.importcvs()) {
+				smodel = new DefaultTableModel(load.getData(),load.getTitle().toArray());
+				table.removeAll();
+				table.setModel(smodel);
+				toaster.success("students import success!");
+			}else {
+				toaster.error("students import error!!");
+			}
         }
     }
     private void ExportEventHandler() {
-        toaster.warn("export");
-        StudentSearchController.SEARCH_STUDENT current = null;
-        if(RB_searchStudent.isSelected() && CB_Student.getSelectedItem().toString() == "ALL") {
-        	current = SEARCH_STUDENT.STUDENT_BASIC;
-    		StudentSearchController allsearch = new StudentSearchController(CB_Student.getSelectedItem().toString(),
-					TF_Student.getText(), current);
-    		if(allsearch.queryall()) {
-    			toaster.success("search teacher success!");
-    		}else {
-    			toaster.error("search teacher failed!");
-    		}
-    		
-    		smodel = new DefaultTableModel(((StudentSearchController) allsearch).getDataString(),((StudentSearchController) allsearch).getTitle().toArray());
-    		table.removeAll();
-    		table.setModel(smodel);
-    		
-    		
-    		ExportController export = new ExportController(table, "D:/AllStudents.csv");
+        JFileChooser jfc = new JFileChooser();
+		jfc.showDialog(new JLabel(), "choose");
+		String exportfilepath = jfc.getSelectedFile().getAbsolutePath(); 
+		System.out.println(exportfilepath);
+        if(RB_searchStudent.isSelected()) {
+    
+    		ExportController export = new ExportController(table, exportfilepath);
     		if(export.exportToCSV()) {
     			toaster.success("export success!");
     		}else {
     			toaster.error("exprot error!!");
     		}
     		}else {
-    		ExportController export = new ExportController(table, "D:/Students.csv");
+    		ExportController export = new ExportController(table, exportfilepath);
     		if(export.exportToCSV()) {
     			toaster.success("export success!");
     		}else {

@@ -85,6 +85,9 @@ public class ModifyController extends AbstractModifyController implements Runnab
 		case 3:
 			sql = ("update `Basic_Student` set "+changekeyword+"= '"+changedata+"' where StudentId= '"+id+"';");
 			break;
+		case 4:
+			sql = ("update `Basic_ImmunizationRecord` set "+changekeyword+"= '"+changedata+"' where RecordId= '"+id+"';");
+			break;
 		
 			
 		}	
