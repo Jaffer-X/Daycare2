@@ -155,22 +155,22 @@ public class TeacherSearchController extends AbstractSearchController implements
 			if(!this.containFeature&&!this.containGroup&&!this.containClassroom) {
 		 sql = ("select * from `Basic_Teacher` where "+category+"='"+keyword+"';");
 			}else if(this.containFeature&&this.containGroup&&this.containClassroom) {
-			 sql =("select t.Name,t.Age,t.Wage,t.GenderFeature,t.ReadingFeature,t.SportFeature,t.MathFeature,r.GroupId,r.ClassroomId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+			 sql =("select t.teacherid,t.Name,t.Age,t.Wage,t.GenderFeature,t.ReadingFeature,t.SportFeature,t.MathFeature,r.GroupId,r.ClassroomId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
 			 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
 		 }else if(this.containClassroom && !this.containGroup && !this.containFeature) {
-			 sql =("select t.Name,t.Age,t.Wage,r.ClassroomId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+			 sql =("select t.teacherid,t.Name,t.Age,t.Wage,r.ClassroomId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
 				 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
 		 }else if(this.containClassroom && this.containGroup && !this.containFeature) {
-			 sql =("select t.Name,t.Age,t.Wage,r.ClassroomId,r.GroupId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+			 sql =("select t.teacherid,t.Name,t.Age,t.Wage,r.ClassroomId,r.GroupId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
 				 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
 		 }else if(this.containClassroom && !this.containGroup && this.containFeature) {
-			 sql =("select t.Name,t.Age,t.Wage,t.GenderFeature,t.ReadingFeature,t.SportFeature,t.MathFeature,r.GroupId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+			 sql =("select t.teacherid,t.Name,t.Age,t.Wage,t.GenderFeature,t.ReadingFeature,t.SportFeature,t.MathFeature,r.GroupId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
 				 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
 		 }else if(!this.containClassroom && this.containGroup && !this.containFeature) {
-			 sql =("select t.Name,t.Age,t.Wage,r.GroupId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+			 sql =("select t.teacherid,t.Name,t.Age,t.Wage,r.GroupId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
 				 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
 		 }else if(!this.containClassroom && this.containGroup && this.containFeature) {
-			 sql =("select t.Name,t.Age,t.Wage,t.GenderFeature,t.ReadingFeature,t.SportFeature,t.MathFeature,r.GroupId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
+			 sql =("select t.teacherid,t.Name,t.Age,t.Wage,t.GenderFeature,t.ReadingFeature,t.SportFeature,t.MathFeature,r.GroupId from `Basic_Teacher` t, `Basic_TeachingRecord` r"
 				 		+ " where t.TeacherId=r.TeacherId and t."+category+"='"+keyword+"';");
 		 }else if(!this.containClassroom && !this.containGroup && this.containFeature) {
 			 sql = ("select * from `Basic_Teacher` where "+category+"='"+keyword+"';");

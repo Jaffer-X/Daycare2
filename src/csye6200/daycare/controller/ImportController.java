@@ -65,19 +65,19 @@ public class ImportController {
 	     System.out.println(content.toString());
 		
 	     
-//	     if(formname == "Basic_Teacher") {
-//	      sql = ("insert into `"+formname+"` ( `Name`, `Age`, `Wage`,  `GenderFeature`, `ReadingFeature`, `SportFeature`, `MathFeature`) "
-//	     		+ "VALUES ('"+value[1]+"',"+value[2]+","+value[3]+","+value[5]+","+value[6]+","+value[7]+","+value[8]+");");
-//	     }else if(formname == "Basic_Student") {
-//	    	 sql = ("insert into `"+formname+"` ( `Name`, `Age`, `Grade`, `parentName`, `Address`, `parentPhone`, `Gender`,`ReadTest`, `SportTest`, `MathTest`, `Period`) "
-//	 	     		+ "VALUES ('"+value[1]+"',"+value[2]+","+value[3]+",'"+value[4]+"','"+value[5]+"',"+value[6]+",'"+value[7]+"',"+value[8]+","+value[9]+","+value[10]+","+value[12]+");");
-//	     }
-//	     System.out.println(sql); 
-//	     mConn = new MySQLConnection();
-//			if(mConn.getConnection()==null) {
-//				this.success=false;
-//			}
-//			this.success = mConn.sendSQLInsert(sql);	
+	     if(formname == "Basic_Teacher") {
+	      sql = ("insert into `"+formname+"` ( `Name`, `Age`, `Wage`,  `GenderFeature`, `ReadingFeature`, `SportFeature`, `MathFeature`) "
+	     		+ "VALUES ('"+value[1]+"',"+value[2]+","+value[3]+","+value[5]+","+value[6]+","+value[7]+","+value[8]+");");
+	     }else if(formname == "Basic_Student") {
+	    	 sql = ("insert into `"+formname+"` ( `Name`, `Age`, `Grade`, `parentName`, `Address`, `parentPhone`, `Gender`,`ReadTest`, `SportTest`, `MathTest`, `Period`) "
+	 	     		+ "VALUES ('"+value[1]+"',"+value[2]+","+value[3]+",'"+value[4]+"','"+value[5]+"',"+value[6]+",'"+value[7]+"',"+value[8]+","+value[9]+","+value[10]+","+value[12]+");");
+	     }
+	     System.out.println(sql); 
+	     mConn = new MySQLConnection();
+			if(mConn.getConnection()==null) {
+				this.success=false;
+			}
+			this.success = mConn.sendSQLInsert(sql);	
 		}
 	    br.close();
 	    Iterator<ArrayList<String>> it = fromdata.iterator();

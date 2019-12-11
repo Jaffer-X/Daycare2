@@ -24,30 +24,38 @@ public class ExportController {
 	
 	public  boolean exportToCSV() { 
 
-		    try { 
+		  try { 
 
-		     TableModel model = exportTable.getModel(); 
-		     FileWriter csv = new FileWriter(new File(path)); 
+			     TableModel model = exportTable.getModel(); 
+			     FileWriter csv = new FileWriter(new File(path)); 
 
-		     for (int i = 0; i < model.getColumnCount(); i++) { 
-		      csv.write(model.getColumnName(i) + ","); 
-		     } 
+			     for (int i = 0; i < model.getColumnCount(); i++) { 
+			      csv.write(model.getColumnName(i) + ","); 
+			     } 
 
-		     csv.write("\n"); 
+			     csv.write("\n"); 
 
-		     for (int i = 0; i < model.getRowCount(); i++) { 
-		      for (int j = 0; j < model.getColumnCount(); j++) { 
-		       csv.write(model.getValueAt(i, j).toString() + ","); 
-		      } 
-		      csv.write("\n"); 
-		     } 
+			     for (int i = 0; i < model.getRowCount(); i++) { 
+			      for (int j = 0; j < model.getColumnCount(); j++) { 
+			    	  try {
+			       csv.write(model.getValueAt(i, j).toString() + ","); 
+			    	  } catch (Exception e) {
+			                String key = "null";
+			                csv.write(key);
+			                //continue;
+			            }
+			      } 
+			      csv.write("\n"); 
+			     } 
 
-		     csv.close(); 
-		     return true; 
-		    } catch (IOException e) { 
-		     e.printStackTrace(); 
-		    } 
-		    return false; 
-		} 
+			     csv.close(); 
+			     return true; 
+			    } catch (IOException e) { 
+			     e.printStackTrace(); 
+			    } 
+			    return false; 
+			} 
+		
 	
 }
+

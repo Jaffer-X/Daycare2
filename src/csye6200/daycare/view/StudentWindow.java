@@ -493,14 +493,19 @@ public class StudentWindow extends JFrame{
     }
 
     private void ModifyEventHandler() {
+    	ModifyController tmodify;
     	if (UserCircumstances.getInstance().isDataBaseOP_asyn()) {
     		if(RB_searchStudent.isSelected()) {
     			if(RB_studentBasic.isSelected()) {
     			for(int row = firstchangerow; row<= lastchangerow; row++) {
     				String updatekeywords = smodel.getColumnName(changecolumn);
     				Object updatedata = smodel.getValueAt(row, changecolumn);
-    				int updateid = (int) smodel.getValueAt(row, 0);
-    				ModifyController tmodify = new ModifyController(updatekeywords,updatedata,updateid,3);
+    				int updateid =(int) smodel.getValueAt(row, 0);
+    				if(updatekeywords.equals("TeacherId") || updatekeywords.equals("GroupId") || updatekeywords.equals("ClassroomId")) {
+    					 tmodify = new ModifyController(updatekeywords,updatedata,updateid,6);
+    				}else {
+    				 tmodify = new ModifyController(updatekeywords,updatedata,updateid,3);
+    				}
     				if(tmodify.update()) {
     					toaster.success("update success!");
     				}else {
@@ -512,7 +517,33 @@ public class StudentWindow extends JFrame{
         				String updatekeywords = smodel.getColumnName(changecolumn);
         				Object updatedata = smodel.getValueAt(row, changecolumn);
         				int updateid = (int) smodel.getValueAt(row, 2);
-        				ModifyController tmodify = new ModifyController(updatekeywords,updatedata,updateid,4);
+        				 tmodify = new ModifyController(updatekeywords,updatedata,updateid,4);
+        				if(tmodify.update()) {
+        					toaster.success("update success!");
+        				}else {
+        					toaster.error("this type cannot be modify there!");
+        				}
+        			}
+    			}
+    		}else if(RB_searchRecord.isSelected()) {
+    			if(RB_teachingRecord.isSelected()) {
+    				for(int row = firstchangerow; row<= lastchangerow; row++) {
+        				String updatekeywords = smodel.getColumnName(changecolumn);
+        				Object updatedata = smodel.getValueAt(row, changecolumn);
+        				int updateid = (int) smodel.getValueAt(row, 2);
+        				 tmodify = new ModifyController(updatekeywords,updatedata,updateid,5);
+        				if(tmodify.update()) {
+        					toaster.success("update success!");
+        				}else {
+        					toaster.error("this type cannot be modify there!");
+        				}
+        			}
+    			}else if(RB_immunizationRecord.isSelected()) {
+    				for(int row = firstchangerow; row<= lastchangerow; row++) {
+        				String updatekeywords = smodel.getColumnName(changecolumn);
+        				Object updatedata = smodel.getValueAt(row, changecolumn);
+        				int updateid = (int) smodel.getValueAt(row, 2);
+        			 tmodify = new ModifyController(updatekeywords,updatedata,updateid,4);
         				if(tmodify.update()) {
         					toaster.success("update success!");
         				}else {
@@ -525,23 +556,35 @@ public class StudentWindow extends JFrame{
     }
     private void ImportEventHandler() {
     	JFileChooser jfc = new JFileChooser();
-		jfc.showDialog(new JLabel(), "choose");
-		String filepath = jfc.getSelectedFile().getAbsolutePath(); 
-		System.out.println(filepath);
-        if(RB_searchStudent.isSelected()) {
-        	if (RB_studentBasic.isSelected()) {   		
-        	ImportController load = new ImportController("Basic_Student", filepath);
-			if(load.importcvs()) {
-				smodel = new DefaultTableModel(load.getData(),load.getTitle().toArray());
-				table.removeAll();
-				table.setModel(smodel);
-				toaster.success("students import success!");
-			}else {
-				toaster.error("students import error!!");
-			}
-        	}else {
-        		ImportController load = new ImportController("Basic_im", filepath);
-        		if(load.importcvs()) {
+    	jfc.showDialog(new JLabel(), "choose");
+    	String filepath = jfc.getSelectedFile().getAbsolutePath(); 
+    	System.out.println(filepath);
+    	if(RB_searchStudent.isSelected()) {
+    		if (RB_studentBasic.isSelected()) {  
+    			if(CKB_student1.isSelected()|| CKB_student2.isSelected() || CKB_student3.isSelected()) {
+    				ImportController load = new ImportController("Basic_im", filepath);
+    				if(load.importcvs()) {
+    					smodel = new DefaultTableModel(load.getData(),load.getTitle().toArray());
+    					table.removeAll();
+    					table.setModel(smodel);
+    					toaster.success("students import success!");
+    				}else {
+    					toaster.error("students import error!!");
+    				}
+    			}else {
+    				ImportController load = new ImportController("Basic_Student", filepath);
+    				if(load.importcvs()) {
+    					smodel = new DefaultTableModel(load.getData(),load.getTitle().toArray());
+    					table.removeAll();
+    					table.setModel(smodel);
+    					toaster.success("students import success!");
+    				}else {
+    					toaster.error("students import error!!");
+    				}
+    			}
+    		}else {
+    			ImportController load = new ImportController("Basic_im", filepath);
+    			if(load.importcvs()) {
     				smodel = new DefaultTableModel(load.getData(),load.getTitle().toArray());
     				table.removeAll();
     				table.setModel(smodel);
@@ -549,18 +592,18 @@ public class StudentWindow extends JFrame{
     			}else {
     				toaster.error("students import error!!");
     			}
-        	}
-        }if(RB_searchRecord.isSelected()) {
-        	ImportController load = new ImportController("Basic_im", filepath);
-        	if(load.importcvs()) {
-				smodel = new DefaultTableModel(load.getData(),load.getTitle().toArray());
-				table.removeAll();
-				table.setModel(smodel);
-				toaster.success("students import success!");
-			}else {
-				toaster.error("students import error!!");
-			}
-        }
+    		}
+    	}if(RB_searchRecord.isSelected()) {
+    		ImportController load = new ImportController("Basic_im", filepath);
+    		if(load.importcvs()) {
+    			smodel = new DefaultTableModel(load.getData(),load.getTitle().toArray());
+    			table.removeAll();
+    			table.setModel(smodel);
+    			toaster.success("students import success!");
+    		}else {
+    			toaster.error("students import error!!");
+    		}
+    	}
     }
     private void ExportEventHandler() {
         JFileChooser jfc = new JFileChooser();

@@ -93,24 +93,24 @@ public class StudentSearchController extends AbstractSearchController implements
 			if(!this.containClassroom&&!this.containGroup&&!this.containTeacher) {
 				sql = ("select * from `Basic_Student` where "+category+"='"+keyword+"';");
 			}else if(this.containTeacher&&this.containGroup&&this.containClassroom) {
-				sql = ("select s.name,s.age,s.grade,s.readTest,s.sportTest,s.MathTest,r.teacherId,r.GroupId,r.ClassroomId from `Basic_Student` s, `Basic_TeachingRecord` r where s.studentId=r.studentId and s."+category+"='"+keyword+"';");
+				sql = ("select s.StudentId,s.name,s.age,s.grade,s.readTest,s.sportTest,s.MathTest,r.teacherId,r.GroupId,r.ClassroomId from `Basic_Student` s, `Basic_TeachingRecord` r where s.studentId=r.studentId and s."+category+"='"+keyword+"';");
 			}else if(this.containTeacher&& !this.containGroup&& !this.containClassroom) {
-				sql = ("select s.name,s.age,s.grade,s.readTest,s.sportTest,s.MathTest,r.teacherId "
+				sql = ("select s.StudentId,s.name,s.age,s.grade,s.readTest,s.sportTest,s.MathTest,r.teacherId "
 						+ "from `Basic_Student` s, `Basic_TeachingRecord` r where s.studentId=r.studentId and s."+category+"='"+keyword+"';");
 			}else if(this.containTeacher&& this.containGroup&& !this.containClassroom) {
-				sql = ("select s.name,s.age,s.grade,s.readTest,s.sportTest,s.MathTest,r.teacherId,r.GroupId "
+				sql = ("select s.StudentId,s.name,s.age,s.grade,s.readTest,s.sportTest,s.MathTest,r.teacherId,r.GroupId "
 						+ "from `Basic_Student` s, `Basic_TeachingRecord` r where s.studentId=r.studentId and s."+category+"='"+keyword+"';");
 			}else if(!this.containTeacher&& this.containGroup&& !this.containClassroom) {
-				sql = ("select s.name,s.age,s.grade,s.readTest,s.sportTest,s.MathTest,r.GroupId "
+				sql = ("select s.StudentId,s.name,s.age,s.grade,s.readTest,s.sportTest,s.MathTest,r.GroupId "
 						+ "from `Basic_Student` s, `Basic_TeachingRecord` r where s.studentId=r.studentId and s."+category+"='"+keyword+"';");
 			}else if(!this.containTeacher&& this.containGroup&& this.containClassroom) {
-				sql = ("select s.name,s.age,s.grade,s.readTest,s.sportTest,s.MathTest,r.GroupId,r.ClassroomId "
+				sql = ("select s.StudentId,s.name,s.age,s.grade,s.readTest,s.sportTest,s.MathTest,r.GroupId,r.ClassroomId "
 						+ "from `Basic_Student` s, `Basic_TeachingRecord` r where s.studentId=r.studentId and s."+category+"='"+keyword+"';");
 			}else if(!this.containTeacher&& !this.containGroup&& this.containClassroom) {
-				sql = ("select s.name,s.age,s.grade,s.readTest,s.sportTest,s.MathTest,r.ClassroomId "
+				sql = ("select s.StudentId,s.name,s.age,s.grade,s.readTest,s.sportTest,s.MathTest,r.ClassroomId "
 						+ "from `Basic_Student` s, `Basic_TeachingRecord` r where s.studentId=r.studentId and s."+category+"='"+keyword+"';");
 			}else if(this.containTeacher&& !this.containGroup&& this.containClassroom) {
-				sql = ("select s.name,s.age,s.grade,s.readTest,s.sportTest,s.MathTest,r.teacherId,r.ClassroomId "
+				sql = ("select s.StudentId,s.name,s.age,s.grade,s.readTest,s.sportTest,s.MathTest,r.teacherId,r.ClassroomId "
 						+ "from `Basic_Student` s, `Basic_TeachingRecord` r where s.studentId=r.studentId and s."+category+"='"+keyword+"';");
 			}
 			}
