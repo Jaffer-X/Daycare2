@@ -64,7 +64,7 @@ public class ImportController {
 	     fromdata.add(content);
 	     System.out.println(content.toString());
 		
-	     
+	     if(formname == "Basic_Teacher"||formname == "Basic_Student") {
 	     if(formname == "Basic_Teacher") {
 	      sql = ("insert into `"+formname+"` ( `Name`, `Age`, `Wage`,  `GenderFeature`, `ReadingFeature`, `SportFeature`, `MathFeature`) "
 	     		+ "VALUES ('"+value[1]+"',"+value[2]+","+value[3]+","+value[5]+","+value[6]+","+value[7]+","+value[8]+");");
@@ -78,16 +78,17 @@ public class ImportController {
 				this.success=false;
 			}
 			this.success = mConn.sendSQLInsert(sql);	
+	     }
 		}
 	    br.close();
 	    Iterator<ArrayList<String>> it = fromdata.iterator();
 	     this.data = new Object[fromdata.size()][this.title.size()];
 		for(int i=0;i<fromdata.size();i++) {
 			Object[] ta= it.next().toArray();
-			System.out.println(ta.toString());
+			
 			for(int j=0;j<ta.length;j++) {
 				this.data[i][j]=ta[j];
-				System.out.println(ta[j]);
+				
 			}
 		}
 	    return true;

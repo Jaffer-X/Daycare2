@@ -136,6 +136,7 @@ public class StudentWindow extends JFrame{
         mainJPanel.add(CB_Teacher);
         CB_Teacher.setBounds(150,270,200,40);
         
+        
         TF_Record = new mTextField();
         mainJPanel.add(TF_Record);
         TF_Record.setBounds(400,270,200,40);
@@ -160,6 +161,7 @@ public class StudentWindow extends JFrame{
         CKB_record1.setBounds(250,370,150,44);
         CKB_record2.setBounds(400,370,150,44);
         CKB_record3.setBounds(550,370,150,44);
+        CKB_record1.setSelected(true);
         
         //seperator
         JSeparator separator1 = new JSeparator();

@@ -40,9 +40,11 @@ public class ExportController {
 			    	  try {
 			       csv.write(model.getValueAt(i, j).toString() + ","); 
 			    	  } catch (Exception e) {
-			                String key = "null";
-			                csv.write(key);
+//			                String key = "null";
+//			                csv.write(key);
 			                //continue;
+			    		  csv.write("");
+			    		  csv.write(","); 
 			            }
 			      } 
 			      csv.write("\n"); 
